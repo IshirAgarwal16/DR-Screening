@@ -4,3 +4,4 @@ torchvision==0.29.0
 Pillow
 numpy
 opencv-python-headless
+huggingface_hub

@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
 from torchvision import models
+from huggingface_hub import hf_hub_download
 
-MODEL_PATH = "best_model.pth"
+
+MODEL_REPO = "ishiragarwal16/dr-screening-resnet18"
+MODEL_FILENAME = "best_model.pth"
 
 CLASS_NAMES = [
     "No DR",
@@ -19,22 +22,25 @@ def get_device():
 
 def create_model():
     model = models.resnet18(weights=None)
-
     model.fc = nn.Linear(
         model.fc.in_features,
         5
     )
-
     return model
 
 
 def load_model():
     device = get_device()
-
     model = create_model()
 
+    # Download model from Hugging Face
+    model_path = hf_hub_download(
+        repo_id=MODEL_REPO,
+        filename=MODEL_FILENAME,
+    )
+
     checkpoint = torch.load(
-        MODEL_PATH,
+        model_path,
         map_location=device
     )
 
