@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+best_model.pth
+
+.streamlit/
+.env
