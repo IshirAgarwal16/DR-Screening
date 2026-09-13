@@ -16,6 +16,7 @@ from torchvision import transforms
 
 from model import load_model, CLASS_NAMES
 from gradcam import generate_gradcam
+from quality_check import validate_fundus, check_image_quality
 
 
 # ---------------------------------------------------------------------
@@ -179,6 +180,12 @@ def run_real_analysis(image):
 if "analysis_result" not in st.session_state:
     st.session_state.analysis_result = None
 
+if "validator_result" not in st.session_state:
+    st.session_state.validator_result = None
+
+if "quality_result" not in st.session_state:
+    st.session_state.quality_result = None
+
 if "uploaded_image" not in st.session_state:
     st.session_state.uploaded_image = None
 
@@ -226,9 +233,9 @@ with st.sidebar:
     st.markdown("---")
 
     st.info(
-        "**AI MODEL ACTIVE**\n\n"
-        "This dashboard uses the trained DR grading model "
-        "loaded from `best_model.pth`."
+        "**AI MODELS ACTIVE**\n\n"
+        "Fundus validation, image quality assessment "
+        "and DR grading models are active."
     )
 
 
@@ -241,8 +248,7 @@ st.title(
 )
 
 st.markdown(
-    "##### Clinical Decision-Support for Rural Healthcare Screening  "
-    ""
+    "##### Clinical Decision-Support for Rural Healthcare Screening"
 )
 
 st.markdown("---")
@@ -322,41 +328,196 @@ with col_left:
 
     if analyze_clicked:
 
-        with st.spinner(
-            "Running AI model and generating Grad-CAM..."
-        ):
+        # Clear previous results first
+        st.session_state.analysis_result = None
+        st.session_state.gradcam_image = None
+        st.session_state.validator_result = None
+        st.session_state.quality_result = None
 
-            image = Image.open(
-                uploaded_file
-            ).convert("RGB")
+        image = Image.open(
+            uploaded_file
+        ).convert("RGB")
 
-            # AI prediction
-            grade, confidence = run_real_analysis(
+
+        # =============================================================
+        # STEP 1: FUNDUS VALIDATION
+        # =============================================================
+
+        with st.spinner("Validating retinal image..."):
+
+            validator_class, validator_confidence = validate_fundus(
                 image
             )
 
-            # Load model
-            model, device = get_ai_model()
+        st.session_state.validator_result = {
+            "class": validator_class,
+            "confidence": round(validator_confidence, 1),
+        }
 
-            # Generate Grad-CAM
-            gradcam_image, _ = generate_gradcam(
-                model,
-                image,
-                device,
-            )
 
-            # Save results
-            st.session_state.analysis_result = {
-                "grade": grade,
-                "confidence": confidence,
-                "patient_id": patient_id,
-                "patient_age": patient_age,
-                "screening_date": screening_date,
+        # =============================================================
+        # REJECT NON-FUNDUS IMAGE
+        # =============================================================
+
+        if validator_class == "non_fundus":
+
+            st.session_state.analysis_result = None
+            st.session_state.gradcam_image = None
+
+        else:
+
+            # =========================================================
+            # STEP 2: IMAGE QUALITY CHECK
+            # =========================================================
+
+            with st.spinner("Checking retinal image quality..."):
+
+                quality, quality_details = check_image_quality(
+                    image
+                )
+
+            st.session_state.quality_result = {
+                "quality": quality,
+                "details": quality_details,
             }
 
-            st.session_state.gradcam_image = (
-                gradcam_image
-            )
+
+            # =========================================================
+            # REJECT POOR QUALITY IMAGE
+            # =========================================================
+
+            if quality == "poor":
+
+                st.session_state.analysis_result = None
+                st.session_state.gradcam_image = None
+
+            else:
+
+                # =====================================================
+                # STEP 3: DR PREDICTION
+                # =====================================================
+
+                with st.spinner(
+                    "Running DR model and generating Grad-CAM..."
+                ):
+
+                    grade, confidence = run_real_analysis(
+                        image
+                    )
+
+
+                    # -------------------------------------------------
+                    # Load DR model
+                    # -------------------------------------------------
+
+                    model, device = get_ai_model()
+
+
+                    # -------------------------------------------------
+                    # Generate Grad-CAM
+                    # -------------------------------------------------
+
+                    gradcam_image, _ = generate_gradcam(
+                        model,
+                        image,
+                        device,
+                    )
+
+
+                    # =================================================
+                    # STEP 4: SAVE RESULTS
+                    # =================================================
+
+                    st.session_state.analysis_result = {
+                        "grade": grade,
+                        "confidence": confidence,
+                        "patient_id": patient_id,
+                        "patient_age": patient_age,
+                        "screening_date": screening_date,
+                    }
+
+                    st.session_state.gradcam_image = gradcam_image
+
+
+# ---------------------------------------------------------------------
+# Fundus Validation Result
+# ---------------------------------------------------------------------
+
+validator_result = st.session_state.validator_result
+
+if validator_result is not None:
+
+    if validator_result["class"] == "fundus":
+
+        st.success(
+            f"✅ **Fundus image validated** — "
+            f"Confidence: {validator_result['confidence']}%"
+        )
+
+    else:
+
+        st.error(
+            f"❌ **Invalid image: Not a fundus image** — "
+            f"Confidence: {validator_result['confidence']}%"
+        )
+
+        st.warning(
+            "Please upload a retinal fundus image "
+            "captured using a fundus camera."
+        )
+
+
+# ---------------------------------------------------------------------
+# Image Quality Result
+# ---------------------------------------------------------------------
+
+quality_result = st.session_state.quality_result
+
+if quality_result is not None:
+
+    quality = quality_result["quality"]
+    details = quality_result["details"]
+
+    st.markdown("### 📷 Image Quality Assessment")
+
+    if quality == "good":
+
+        st.success(
+            "✅ **Image quality acceptable for AI screening**"
+        )
+
+    else:
+
+        st.warning(
+            "⚠️ **Poor image quality — recapture recommended**"
+        )
+
+        st.info(
+            "Please recapture the retinal image with better "
+            "focus, lighting and visibility."
+        )
+
+
+    # -------------------------------------------------------------
+    # Quality metrics
+    # -------------------------------------------------------------
+
+    q1, q2, q3 = st.columns(3)
+
+    q1.metric(
+        "Sharpness",
+        details["sharpness"],
+    )
+
+    q2.metric(
+        "Brightness",
+        details["brightness"],
+    )
+
+    q3.metric(
+        "Contrast",
+        details["contrast"],
+    )
 
 
 # ---------------------------------------------------------------------
@@ -394,7 +555,7 @@ with col_right:
         grade_info = DR_GRADES[grade]
 
 
-                # -------------------------------------------------------------
+        # -------------------------------------------------------------
         # DR Grade Box
         # -------------------------------------------------------------
 
@@ -427,6 +588,7 @@ with col_right:
             st.error(
                 f"### Grade {grade}: {grade_info['label']}"
             )
+
 
         # -------------------------------------------------------------
         # Metrics
@@ -535,7 +697,10 @@ if st.session_state.analysis_result is not None:
     grade = st.session_state.analysis_result["grade"]
 
 
+    # -------------------------------------------------------------
     # Text explanation
+    # -------------------------------------------------------------
+
     with exp_col1:
 
         st.markdown(
@@ -553,7 +718,10 @@ if st.session_state.analysis_result is not None:
         )
 
 
+    # -------------------------------------------------------------
     # Grad-CAM
+    # -------------------------------------------------------------
+
     with exp_col2:
 
         st.markdown(
