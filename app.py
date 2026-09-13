@@ -64,6 +64,11 @@ DR_GRADES = {
 }
 
 
+# SIH-tuned threshold
+# Grade 2 + Grade 3 + Grade 4 = Referable DR
+REFERABLE_THRESHOLD = 0.46
+
+
 RECOMMENDATIONS = {
     0: (
         "No diabetic retinopathy was predicted by the AI model. "
@@ -140,7 +145,7 @@ def run_real_analysis(image):
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225],
+            std=[0.229, 0.224, 0.225]
         ),
     ])
 
@@ -155,22 +160,59 @@ def run_real_analysis(image):
 
         probabilities = torch.softmax(
             outputs,
-            dim=1,
+            dim=1
         )
 
-        confidence, prediction = torch.max(
-            probabilities,
-            dim=1,
-        )
+    # -------------------------------------------------------------
+    # 5-Class DR Prediction
+    # -------------------------------------------------------------
+
+    prediction = torch.argmax(
+        probabilities,
+        dim=1
+    )
 
     grade = prediction.item()
 
+    # Confidence of predicted DR grade
     confidence = round(
-        confidence.item() * 100,
-        1,
+        probabilities[0, grade].item() * 100,
+        1
     )
 
-    return grade, confidence
+    # -------------------------------------------------------------
+    # REFERABLE DR
+    #
+    # Grade 0 + Grade 1 = Non-Referable
+    # Grade 2 + Grade 3 + Grade 4 = Referable
+    #
+    # Threshold tuned on APTOS validation split:
+    # 0.46
+    # -------------------------------------------------------------
+
+    referable_probability = (
+        probabilities[0, 2:].sum().item()
+    )
+
+    if referable_probability >= REFERABLE_THRESHOLD:
+
+        referable_status = "Referable DR"
+
+    else:
+
+        referable_status = "Non-Referable DR"
+
+    referable_probability_percent = round(
+        referable_probability * 100,
+        1
+    )
+
+    return (
+        grade,
+        confidence,
+        referable_status,
+        referable_probability_percent
+    )
 
 
 # ---------------------------------------------------------------------
@@ -236,6 +278,10 @@ with st.sidebar:
         "**AI MODELS ACTIVE**\n\n"
         "Fundus validation, image quality assessment "
         "and DR grading models are active."
+    )
+
+    st.caption(
+        f"Referable DR threshold: {REFERABLE_THRESHOLD}"
     )
 
 
@@ -401,7 +447,12 @@ with col_left:
                     "Running DR model and generating Grad-CAM..."
                 ):
 
-                    grade, confidence = run_real_analysis(
+                    (
+                        grade,
+                        confidence,
+                        referable_status,
+                        referable_probability,
+                    ) = run_real_analysis(
                         image
                     )
 
@@ -431,6 +482,8 @@ with col_left:
                     st.session_state.analysis_result = {
                         "grade": grade,
                         "confidence": confidence,
+                        "referable_status": referable_status,
+                        "referable_probability": referable_probability,
                         "patient_id": patient_id,
                         "patient_age": patient_age,
                         "screening_date": screening_date,
@@ -613,6 +666,36 @@ with col_right:
 
 
         # -------------------------------------------------------------
+        # Referable DR Screening Decision
+        # -------------------------------------------------------------
+
+        st.markdown("#### 🏥 Referable DR Screening")
+
+        if result["referable_status"] == "Referable DR":
+
+            st.error(
+                f"🔴 **REFERABLE DR**\n\n"
+                f"Referable probability: "
+                f"{result['referable_probability']}%\n\n"
+                f"**Ophthalmologist referral recommended.**"
+            )
+
+        else:
+
+            st.success(
+                f"🟢 **NON-REFERABLE DR**\n\n"
+                f"Referable probability: "
+                f"{result['referable_probability']}%\n\n"
+                f"Routine screening and clinical follow-up recommended."
+            )
+
+        st.caption(
+            "Referable DR is defined as Grade 2–4 "
+            f"with a decision threshold of {REFERABLE_THRESHOLD}."
+        )
+
+
+        # -------------------------------------------------------------
         # Risk Assessment
         # -------------------------------------------------------------
 
@@ -788,7 +871,13 @@ if st.session_state.analysis_result is not None:
 
             **Model Confidence:** {result['confidence']}%
 
+            **Referable DR:** {result['referable_status']}
+
+            **Referable Probability:** {result['referable_probability']}%
+
             **Risk Level:** {grade_info['risk']}
+
+            **Referable Threshold:** {REFERABLE_THRESHOLD}
             """
         )
 
@@ -827,6 +916,15 @@ if st.session_state.analysis_result is not None:
         + f"Model Confidence: "
         + f"{result['confidence']}%\n"
 
+        + f"Referable DR: "
+        + f"{result['referable_status']}\n"
+
+        + f"Referable Probability: "
+        + f"{result['referable_probability']}%\n"
+
+        + f"Referable Threshold: "
+        + f"{REFERABLE_THRESHOLD}\n"
+
         + f"Risk Level: "
         + f"{grade_info['risk']}\n\n"
 
@@ -841,6 +939,12 @@ if st.session_state.analysis_result is not None:
         + EXPLANATION_TEXT[grade]
 
         + "\n\n"
+
+        + "Referable DR Definition:\n"
+
+        + "Grade 2-4 are considered Referable DR for screening purposes.\n"
+
+        + "\n"
 
         + "=" * 45
 
@@ -893,6 +997,7 @@ st.error(
     "professional.",
     icon="⚕️",
 )
+
 
 st.caption(
     "Explainable AI for Diabetic Retinopathy Screening in Rural India | "
