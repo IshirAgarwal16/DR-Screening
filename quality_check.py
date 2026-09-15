@@ -1,16 +1,16 @@
 import cv2
 import numpy as np
 
+from PIL import Image
 import torch
 import torch.nn as nn
-
 from torchvision import models, transforms
 from huggingface_hub import hf_hub_download
 
 
-# ==============================================================
+# =========================
 # FUNDUS VALIDATOR
-# ==============================================================
+# =========================
 
 VALIDATOR_REPO = "ishiragarwal16/fundus-validator"
 VALIDATOR_FILENAME = "best_validator.pth"
@@ -83,6 +83,7 @@ def validate_fundus(image):
         transforms.ToTensor(),
 
         transforms.Normalize(
+
             mean=[
                 0.485,
                 0.456,
@@ -99,14 +100,14 @@ def validate_fundus(image):
 
     image = image.convert("RGB")
 
-    image_tensor = transform(
+    tensor = transform(
         image
     ).unsqueeze(0).to(device)
 
     with torch.no_grad():
 
         output = model(
-            image_tensor
+            tensor
         )
 
         probabilities = torch.softmax(
@@ -133,89 +134,53 @@ def validate_fundus(image):
     )
 
 
-# ==============================================================
+# =========================
 # IMAGE QUALITY CHECK
-# ==============================================================
+# =========================
 
 def check_image_quality(image):
-
-    """
-    Basic fundus image quality assessment.
-
-    Returns:
-        quality:
-            "good" or "poor"
-
-        details:
-            dictionary containing quality measurements
-    """
-
-    # ----------------------------------------------------------
-    # PIL Image → NumPy
-    # ----------------------------------------------------------
 
     image = np.array(
         image.convert("RGB")
     )
-
-
-    # ----------------------------------------------------------
-    # RGB → Grayscale
-    # ----------------------------------------------------------
 
     gray = cv2.cvtColor(
         image,
         cv2.COLOR_RGB2GRAY
     )
 
-
-    # ----------------------------------------------------------
-    # 1. Sharpness / Blur Detection
-    # ----------------------------------------------------------
-
+    # Image quality measurements
     sharpness = cv2.Laplacian(
         gray,
         cv2.CV_64F
     ).var()
 
+    brightness = np.mean(gray)
 
-    # ----------------------------------------------------------
-    # 2. Brightness
-    # ----------------------------------------------------------
-
-    brightness = np.mean(
-        gray
-    )
+    contrast = np.std(gray)
 
 
-    # ----------------------------------------------------------
-    # 3. Contrast
-    # ----------------------------------------------------------
-
-    contrast = np.std(
-        gray
-    )
-
-
-    # ----------------------------------------------------------
-    # Quality Rules
-    # ----------------------------------------------------------
-
-    # Prototype threshold
+    # Quality thresholds
     blur_ok = sharpness >= 10
 
     brightness_ok = (
         30 <= brightness <= 220
     )
 
-    contrast_ok = (
-        contrast >= 25
+    contrast_ok = contrast >= 25
+
+
+    # Convert NumPy bool → Python bool
+    blur_ok = bool(blur_ok)
+
+    brightness_ok = bool(
+        brightness_ok
     )
 
+    contrast_ok = bool(
+        contrast_ok
+    )
 
-    # ----------------------------------------------------------
-    # Final Quality
-    # ----------------------------------------------------------
 
     quality = (
         blur_ok
@@ -223,10 +188,6 @@ def check_image_quality(image):
         and contrast_ok
     )
 
-
-    # ----------------------------------------------------------
-    # Details
-    # ----------------------------------------------------------
 
     details = {
 
@@ -255,7 +216,7 @@ def check_image_quality(image):
             brightness_ok,
 
         "contrast_ok":
-            contrast_ok,
+            contrast_ok
     }
 
 
@@ -263,7 +224,6 @@ def check_image_quality(image):
 
         "good"
         if quality
-        else "poor",
+        else "poor"
 
-        details
-    )
+    ), details
