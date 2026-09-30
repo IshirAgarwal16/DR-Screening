@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DR Screening | Patient Screening</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="screening-page">
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            DR <span>Screening</span>
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="patient.html">Patient</a>
+            <a href="login.html" id="logoutLink">Logout</a>
+        </nav>
+
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="screening-container">
+
+        <!-- ================= PAGE HEADER ================= -->
+
+        <div class="screening-header">
+
+            <div>
+
+                <div class="section-label">
+                    AI-POWERED SCREENING
+                </div>
+
+                <h1>
+                    Diabetic Retinopathy Screening
+                </h1>
+
+                <p>
+                    Upload a retinal fundus image to perform
+                    AI-assisted diabetic retinopathy screening.
+                </p>
+
+            </div>
+
+
+            <!-- ================= PATIENT INFORMATION ================= -->
+
+            <div class="patient-mini-card">
+
+                <div class="patient-mini-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <span>
+                        Current Patient
+                    </span>
+
+                    <strong id="screeningPatientName">
+                        Loading...
+                    </strong>
+
+                    <small id="screeningPatientDetails">
+                        Loading patient information...
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SCREENING GRID ================= -->
+
+        <div class="screening-grid">
+
+
+            <!-- ================= UPLOAD CARD ================= -->
+
+            <div class="screening-card upload-card">
+
+                <div class="screening-card-header">
+
+                    <div class="screening-icon">
+                        📷
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Fundus Image
+                        </h2>
+
+                        <p>
+                            Upload a clear retinal image
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= UPLOAD AREA ================= -->
+
+                <label
+                    for="fundusImage"
+                    class="upload-area"
+                    id="uploadArea"
+                >
+
+                    <div class="upload-icon">
+                        ⬆
+                    </div>
+
+                    <h3>
+                        Upload Fundus Image
+                    </h3>
+
+                    <p>
+                        Click to select an image
+                    </p>
+
+                    <span>
+                        JPG, JPEG or PNG
+                    </span>
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="fundusImage"
+                    accept="image/png, image/jpeg"
+                    hidden
+                >
+
+
+                <!-- ================= IMAGE PREVIEW ================= -->
+
+                <div
+                    id="imagePreviewContainer"
+                    class="image-preview-container"
+                    style="display: none;"
+                >
+
+                    <img
+                        id="imagePreview"
+                        src=""
+                        alt="Selected fundus image"
+                    >
+
+                    <button
+                        type="button"
+                        id="removeImage"
+                        class="remove-image"
+                    >
+                        Remove Image
+                    </button>
+
+                </div>
+
+
+                <!-- ================= ANALYZE BUTTON ================= -->
+
+                <button
+                    type="button"
+                    id="analyzeButton"
+                    class="screening-button"
+                    disabled
+                >
+                    Analyze Retina
+                </button>
+
+
+                <!-- ================= LOADING ================= -->
+
+                <div
+                    id="loadingMessage"
+                    class="screening-loading"
+                    style="display: none;"
+                >
+
+                    <div class="spinner"></div>
+
+                    <p>
+                        AI is analyzing the retinal image...
+                    </p>
+
+                    <span>
+                        Please wait
+                    </span>
+
+                </div>
+
+
+                <!-- ================= MESSAGE ================= -->
+
+                <div
+                    id="screeningMessage"
+                    class="screening-message"
+                ></div>
+
+            </div>
+
+
+            <!-- ================= PROCESS CARD ================= -->
+
+            <div class="screening-card">
+
+                <div class="screening-card-header">
+
+                    <div class="screening-icon">
+                        🔬
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Screening Process
+                        </h2>
+
+                        <p>
+                            AI analysis pipeline
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-list">
+
+
+                    <!-- STEP 1 -->
+
+                    <div class="process-step">
+
+                        <div class="process-number">
+                            1
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Fundus Validation
+                            </strong>
+
+                            <p>
+                                Checks whether the uploaded image
+                                is a retinal fundus image.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="process-line"></div>
+
+
+                    <!-- STEP 2 -->
+
+                    <div class="process-step">
+
+                        <div class="process-number">
+                            2
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Image Quality Check
+                            </strong>
+
+                            <p>
+                                Evaluates image sharpness,
+                                brightness and contrast.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="process-line"></div>
+
+
+                    <!-- STEP 3 -->
+
+                    <div class="process-step">
+
+                        <div class="process-number">
+                            3
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                AI DR Detection
+                            </strong>
+
+                            <p>
+                                ResNet18 predicts the
+                                diabetic retinopathy grade.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="process-line"></div>
+
+
+                    <!-- STEP 4 -->
+
+                    <div class="process-step">
+
+                        <div class="process-number">
+                            4
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Explainable AI
+                            </strong>
+
+                            <p>
+                                Grad-CAM highlights regions
+                                influencing the AI prediction.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RESULT SECTION ================= -->
+
+        <section
+            id="resultSection"
+            class="result-section"
+            style="display: none;"
+        >
+
+            <!-- RESULT HEADER -->
+
+            <div class="result-header">
+
+                <div>
+
+                    <div class="section-label">
+                        SCREENING RESULT
+                    </div>
+
+                    <h2>
+                        AI Analysis Result
+                    </h2>
+
+                </div>
+
+                <div
+                    id="resultStatus"
+                    class="result-status"
+                >
+                    Completed
+                </div>
+
+            </div>
+
+
+            <!-- ================= RESULT CARDS ================= -->
+
+            <div class="result-grid">
+
+
+                <!-- DR GRADE -->
+
+                <div class="result-card">
+
+                    <span class="result-label">
+                        DR Grade
+                    </span>
+
+                    <strong
+                        id="drClass"
+                        class="result-value"
+                    >
+                        —
+                    </strong>
+
+                    <span
+                        id="drGrade"
+                        class="result-secondary"
+                    >
+                        Grade —
+                    </span>
+
+                </div>
+
+
+                <!-- CONFIDENCE -->
+
+                <div class="result-card">
+
+                    <span class="result-label">
+                        AI Confidence
+                    </span>
+
+                    <strong
+                        id="confidence"
+                        class="result-value"
+                    >
+                        —
+                    </strong>
+
+                    <span class="result-secondary">
+                        Model prediction confidence
+                    </span>
+
+                </div>
+
+
+                <!-- REFERABLE STATUS -->
+
+                <div class="result-card">
+
+                    <span class="result-label">
+                        Screening Status
+                    </span>
+
+                    <strong
+                        id="referableStatus"
+                        class="result-value"
+                    >
+                        —
+                    </strong>
+
+                    <span
+                        id="referableProbability"
+                        class="result-secondary"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= IMAGE RESULTS ================= -->
+
+            <div class="result-images">
+
+
+                <!-- ORIGINAL IMAGE -->
+
+                <div class="result-image-card">
+
+                    <h3>
+                        Original Fundus Image
+                    </h3>
+
+                    <div class="result-image-container">
+
+                        <img
+                            id="originalResultImage"
+                            src=""
+                            alt="Original fundus image"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- GRAD-CAM -->
+
+                <div class="result-image-card">
+
+                    <h3>
+                        Explainable AI — Grad-CAM
+                    </h3>
+
+                    <div class="result-image-container">
+
+                        <img
+                            id="gradcamImage"
+                            src=""
+                            alt="Grad-CAM heatmap"
+                        >
+
+                    </div>
+
+                    <p class="gradcam-note">
+                        Highlighted regions represent areas
+                        that influenced the AI prediction.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= RECOMMENDATION ================= -->
+
+            <div class="recommendation-card">
+
+                <div class="recommendation-icon">
+                    🩺
+                </div>
+
+                <div>
+
+                    <span>
+                        AI Recommendation
+                    </span>
+
+                    <p id="recommendation">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= QUALITY DETAILS ================= -->
+
+            <div
+                id="qualityDetails"
+                class="quality-details"
+            >
+
+                <h3>
+                    Image Quality Assessment
+                </h3>
+
+                <div class="quality-grid">
+
+                    <div>
+
+                        <span>
+                            Sharpness
+                        </span>
+
+                        <strong id="sharpness">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Brightness
+                        </span>
+
+                        <strong id="brightness">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Contrast
+                        </span>
+
+                        <strong id="contrast">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= NEW SCREENING ================= -->
+
+            <div class="new-screening">
+
+                <button
+                    type="button"
+                    id="newScreeningButton"
+                    class="secondary-screening-button"
+                >
+                    Start New Screening
+                </button>
+
+
+                <!-- ================= SCREENING HISTORY ================= -->
+
+                <button
+                    type="button"
+                    class="secondary-screening-button"
+                    onclick="window.location.href='history.html'"
+                    style="margin-top: 12px;"
+                >
+                    View Screening History
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
