@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -79,6 +80,44 @@
             opacity: 0.7;
         }
 
+        /* ================= FILTERS ================= */
+
+        .filter-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filter-input,
+        .filter-select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 8px;
+            background: transparent;
+            color: inherit;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            border-color: #4f8cff;
+        }
+
+        .filter-select option {
+            background: #111827;
+            color: white;
+        }
+
+        .filter-summary {
+            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
         .table-container {
             overflow-x: auto;
         }
@@ -99,11 +138,47 @@
             font-weight: 600;
         }
 
+        /* ================= VIEW HISTORY ================= */
+
         .history-button {
             padding: 9px 14px;
             border: none;
             border-radius: 7px;
             cursor: pointer;
+        }
+
+        /* ================= DELETE HISTORY ================= */
+
+        .delete-history-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-left: 6px;
+            font-size: 13px;
+        }
+
+        .delete-history-button:hover {
+            background: #b91c1c;
+        }
+
+        /* ================= DELETE PATIENT ================= */
+
+        .delete-patient-button {
+            background: #7f1d1d;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-left: 6px;
+            font-size: 13px;
+        }
+
+        .delete-patient-button:hover {
+            background: #991b1b;
         }
 
         .loading-message,
@@ -124,8 +199,12 @@
                 grid-template-columns: 1fr;
             }
 
+            .filter-container {
+                grid-template-columns: 1fr;
+            }
+
             .patients-table {
-                min-width: 700px;
+                min-width: 950px;
             }
 
         }
@@ -250,6 +329,79 @@
             </div>
 
 
+            <!-- ================= SEARCH & FILTERS ================= -->
+
+            <div class="filter-container">
+
+                <input
+                    type="text"
+                    id="patientSearch"
+                    class="filter-input"
+                    placeholder="🔍 Search by Patient ID or Name..."
+                    oninput="applyFilters()"
+                >
+
+
+                <select
+                    id="genderFilter"
+                    class="filter-select"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="all">
+                        All Genders
+                    </option>
+
+                    <option value="male">
+                        Male
+                    </option>
+
+                    <option value="female">
+                        Female
+                    </option>
+
+                    <option value="other">
+                        Other
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="screeningFilter"
+                    class="filter-select"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="all">
+                        All Patients
+                    </option>
+
+                    <option value="screened">
+                        Has Screenings
+                    </option>
+
+                    <option value="unscreened">
+                        No Screenings
+                    </option>
+
+                    <option value="referable">
+                        Referable Cases
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="filterSummary"
+                class="filter-summary"
+            >
+                Showing all patients
+            </div>
+
+
             <div
                 id="patientsContainer"
                 class="table-container"
@@ -313,8 +465,10 @@
 
                 displayPatients();
 
+            }
 
-            } catch (error) {
+
+            catch (error) {
 
                 console.error(error);
 
@@ -378,7 +532,10 @@
 
                     }
 
-                } catch (error) {
+                }
+
+
+                catch (error) {
 
                     console.error(
                         `Could not load screenings for patient ${patient.id}`,
@@ -388,6 +545,22 @@
                 }
 
             }
+
+
+            updateStats();
+
+        }
+
+
+        /* =====================================================
+           UPDATE DASHBOARD STATISTICS
+           ===================================================== */
+
+        function updateStats() {
+
+            document.getElementById(
+                "totalPatients"
+            ).textContent = patients.length;
 
 
             document.getElementById(
@@ -414,7 +587,7 @@
            DISPLAY PATIENTS
            ===================================================== */
 
-        function displayPatients() {
+        function displayPatients(patientList = patients) {
 
             const container =
                 document.getElementById(
@@ -422,7 +595,7 @@
                 );
 
 
-            if (!patients || patients.length === 0) {
+            if (!patientList || patientList.length === 0) {
 
                 container.innerHTML = `
 
@@ -433,7 +606,7 @@
                         </h3>
 
                         <p>
-                            No patients have been registered yet.
+                            No patients match the selected filters.
                         </p>
 
                     </div>
@@ -441,6 +614,7 @@
                 `;
 
                 return;
+
             }
 
 
@@ -480,12 +654,13 @@
 
                     </thead>
 
+
                     <tbody>
 
             `;
 
 
-            patients.forEach(patient => {
+            patientList.forEach(patient => {
 
                 const patientScreenings =
                     allScreenings.filter(
@@ -528,6 +703,20 @@
                                 View History
                             </button>
 
+                            <button
+                                class="delete-history-button"
+                                onclick="deletePatientHistory(${patient.id}, '${escapeHTML(patient.name)}')"
+                            >
+                                Delete History
+                            </button>
+
+                            <button
+                                class="delete-patient-button"
+                                onclick="deletePatient(${patient.id}, '${escapeHTML(patient.name)}')"
+                            >
+                                Delete Patient
+                            </button>
+
                         </td>
 
                     </tr>
@@ -547,6 +736,144 @@
 
 
             container.innerHTML = tableHTML;
+
+        }
+
+
+        /* =====================================================
+           SEARCH + FILTER
+           ===================================================== */
+
+        function applyFilters() {
+
+            const searchValue =
+                document.getElementById(
+                    "patientSearch"
+                ).value
+                .trim()
+                .toLowerCase();
+
+
+            const genderValue =
+                document.getElementById(
+                    "genderFilter"
+                ).value
+                .toLowerCase();
+
+
+            const screeningValue =
+                document.getElementById(
+                    "screeningFilter"
+                ).value;
+
+
+            const filteredPatients =
+                patients.filter(patient => {
+
+                    /* =========================
+                       SEARCH
+                       ========================= */
+
+                    const patientId =
+                        String(patient.id)
+                        .toLowerCase();
+
+                    const patientName =
+                        String(patient.name || "")
+                        .toLowerCase();
+
+
+                    const matchesSearch =
+                        patientId.includes(searchValue) ||
+                        patientName.includes(searchValue);
+
+
+                    if (!matchesSearch) {
+                        return false;
+                    }
+
+
+                    /* =========================
+                       GENDER FILTER
+                       ========================= */
+
+                    const patientGender =
+                        String(patient.gender || "")
+                        .toLowerCase();
+
+
+                    const matchesGender =
+                        genderValue === "all" ||
+                        patientGender === genderValue;
+
+
+                    if (!matchesGender) {
+                        return false;
+                    }
+
+
+                    /* =========================
+                       SCREENING FILTER
+                       ========================= */
+
+                    const patientScreenings =
+                        allScreenings.filter(
+                            screening =>
+                                screening.patientId ===
+                                patient.id
+                        );
+
+
+                    if (
+                        screeningValue ===
+                        "screened"
+                    ) {
+
+                        return patientScreenings.length > 0;
+
+                    }
+
+
+                    if (
+                        screeningValue ===
+                        "unscreened"
+                    ) {
+
+                        return patientScreenings.length === 0;
+
+                    }
+
+
+                    if (
+                        screeningValue ===
+                        "referable"
+                    ) {
+
+                        return patientScreenings.some(
+                            screening =>
+                                screening.referableStatus ===
+                                "Referable DR"
+                        );
+
+                    }
+
+
+                    return true;
+
+                });
+
+
+            /* =========================
+               UPDATE SUMMARY
+               ========================= */
+
+            document.getElementById(
+                "filterSummary"
+            ).textContent =
+                `Showing ${filteredPatients.length} of ${patients.length} patients`;
+
+
+            displayPatients(filteredPatients);
 
         }
 
@@ -601,13 +928,283 @@
 
 
         /* =====================================================
+           DELETE PATIENT SCREENING HISTORY
+           ===================================================== */
+
+        async function deletePatientHistory(
+            patientId,
+            patientName
+        ) {
+
+            const patientScreenings =
+                allScreenings.filter(
+                    screening =>
+                        screening.patientId === patientId
+                );
+
+
+            /* ==========================================
+               CHECK IF HISTORY EXISTS
+               ========================================== */
+
+            if (patientScreenings.length === 0) {
+
+                alert(
+                    `No screening history found for ${patientName}.`
+                );
+
+                return;
+            }
+
+
+            /* ==========================================
+               CONFIRM DELETE
+               ========================================== */
+
+            const confirmed = confirm(
+
+                `Are you sure you want to delete ALL screening history for ${patientName} (Patient ID: ${patientId})?\n\n` +
+
+                `This will delete ${patientScreenings.length} screening record(s).\n\n` +
+
+                `The patient record itself will NOT be deleted.\n\n` +
+
+                `This action cannot be undone.`
+
+            );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch(
+
+                    `${BACKEND_URL}/api/screenings/patient/${patientId}`,
+
+                    {
+                        method: "DELETE"
+                    }
+
+                );
+
+
+                if (!response.ok) {
+
+                    if (response.status === 404) {
+
+                        alert(
+                            "No screening history was found for this patient."
+                        );
+
+                    }
+
+                    else {
+
+                        alert(
+                            "Failed to delete screening history."
+                        );
+
+                    }
+
+                    return;
+                }
+
+
+                /* ==========================================
+                   REMOVE SCREENINGS FROM FRONTEND
+                   ========================================== */
+
+                allScreenings =
+                    allScreenings.filter(
+                        screening =>
+                            screening.patientId !== patientId
+                    );
+
+
+                /* ==========================================
+                   UPDATE STATISTICS
+                   ========================================== */
+
+                updateStats();
+
+
+                /* ==========================================
+                   RE-APPLY CURRENT FILTERS
+                   ========================================== */
+
+                applyFilters();
+
+
+                alert(
+                    `Screening history for ${patientName} has been deleted successfully.`
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Error deleting screening history:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to delete screening history. Please make sure the backend is running."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           DELETE COMPLETE PATIENT
+           ===================================================== */
+
+        async function deletePatient(
+            patientId,
+            patientName
+        ) {
+
+            const confirmed = confirm(
+
+                `Are you sure you want to permanently delete ${patientName} (Patient ID: ${patientId})?\n\n` +
+
+                `This will delete the patient AND ALL of their screening history.\n\n` +
+
+                `This action cannot be undone.`
+
+            );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch(
+
+                    `${BACKEND_URL}/api/patients/${patientId}`,
+
+                    {
+                        method: "DELETE"
+                    }
+
+                );
+
+
+                /* ==========================================
+                   HANDLE RESPONSE
+                   ========================================== */
+
+                if (!response.ok) {
+
+                    if (response.status === 404) {
+
+                        alert(
+                            "Patient not found."
+                        );
+
+                    }
+
+                    else {
+
+                        alert(
+                            "Failed to delete patient."
+                        );
+
+                    }
+
+                    return;
+                }
+
+
+                /* ==========================================
+                   REMOVE PATIENT FROM FRONTEND
+                   ========================================== */
+
+                patients =
+                    patients.filter(
+                        patient =>
+                            patient.id !== patientId
+                    );
+
+
+                /* ==========================================
+                   REMOVE PATIENT SCREENINGS
+                   ========================================== */
+
+                allScreenings =
+                    allScreenings.filter(
+                        screening =>
+                            screening.patientId !== patientId
+                    );
+
+
+                /* ==========================================
+                   UPDATE STATISTICS
+                   ========================================== */
+
+                updateStats();
+
+
+                /* ==========================================
+                   RE-APPLY CURRENT FILTERS
+                   ========================================== */
+
+                applyFilters();
+
+
+                /* ==========================================
+                   SUCCESS MESSAGE
+                   ========================================== */
+
+                alert(
+
+                    `${patientName} and their screening history have been deleted successfully.`
+
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Error deleting patient:",
+                    error
+                );
+
+
+                alert(
+
+                    "Unable to delete patient. Please make sure the backend is running."
+
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
            HTML SAFETY
            ===================================================== */
 
         function escapeHTML(value) {
 
-            if (value === null ||
-                value === undefined) {
+            if (
+                value === null ||
+                value === undefined
+            ) {
 
                 return "";
 
