@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>DR Screening | Screening History</title>
@@ -12,7 +10,6 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-
         .history-container {
             max-width: 1200px;
             margin: 40px auto;
@@ -43,11 +40,13 @@
             gap: 20px;
         }
 
-        .patient-info-item span {
+        .patient-info-item span,
+        .screening-item span,
+        .recommendation-box span {
             display: block;
             opacity: 0.6;
             font-size: 14px;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .patient-info-item strong {
@@ -69,8 +68,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
             gap: 15px;
+            margin-bottom: 20px;
         }
 
         .screening-card-header h3 {
@@ -89,13 +88,6 @@
             margin-bottom: 20px;
         }
 
-        .screening-item span {
-            display: block;
-            opacity: 0.6;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
         .screening-item strong {
             font-size: 16px;
         }
@@ -106,29 +98,22 @@
             margin-top: 10px;
         }
 
-        .recommendation-box span {
-            display: block;
-            opacity: 0.6;
-            font-size: 14px;
-            margin-bottom: 6px;
+        .details-button,
+        .back-button {
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
         .details-button {
             margin-top: 20px;
             padding: 10px 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
         }
 
         .back-button {
             margin-top: 25px;
             padding: 11px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
         }
 
         .loading-message,
@@ -139,23 +124,14 @@
         }
 
         @media (max-width: 900px) {
-
-            .patient-info-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
+            .patient-info-grid,
             .screening-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-
         }
 
         @media (max-width: 600px) {
-
-            .patient-info-grid {
-                grid-template-columns: 1fr;
-            }
-
+            .patient-info-grid,
             .screening-grid {
                 grid-template-columns: 1fr;
             }
@@ -164,19 +140,14 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-
         }
-
     </style>
-
 </head>
 
 
 <body>
 
-
-    <!-- ================= NAVBAR ================= -->
-
+    <!-- Navigation -->
     <nav class="navbar">
 
         <div class="logo">
@@ -184,286 +155,318 @@
         </div>
 
         <nav>
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="patient.html">
-                Patient
-            </a>
-
-            <a href="login.html">
-                Logout
-            </a>
-
+            <a href="index.html">Home</a>
+            <a href="patient.html">Patient</a>
+            <a href="login.html">Logout</a>
         </nav>
 
     </nav>
 
 
-    <!-- ================= MAIN ================= -->
-
     <main class="history-container">
 
-
-        <!-- ================= HEADER ================= -->
-
-        <div class="history-header">
+        <!-- Page heading -->
+        <header class="history-header">
 
             <div class="section-label">
                 SCREENING RECORDS
             </div>
 
-            <h1>
-                Screening History
-            </h1>
+            <h1>Screening History</h1>
 
             <p>
                 Review previous diabetic retinopathy screening results.
             </p>
 
-        </div>
+        </header>
 
 
-        <!-- ================= PATIENT INFO ================= -->
-
+        <!-- Patient details -->
         <section class="patient-info-card">
-
 
             <div class="section-label">
                 PATIENT INFORMATION
             </div>
 
-
             <div class="patient-info-grid">
 
-
                 <div class="patient-info-item">
-
-                    <span>
-                        Patient ID
-                    </span>
-
-                    <strong id="patientId">
-                        —
-                    </strong>
-
+                    <span>Patient ID</span>
+                    <strong id="patientId">—</strong>
                 </div>
 
-
                 <div class="patient-info-item">
-
-                    <span>
-                        Name
-                    </span>
-
-                    <strong id="patientName">
-                        —
-                    </strong>
-
+                    <span>Name</span>
+                    <strong id="patientName">—</strong>
                 </div>
 
-
                 <div class="patient-info-item">
-
-                    <span>
-                        Age
-                    </span>
-
-                    <strong id="patientAge">
-                        —
-                    </strong>
-
+                    <span>Age</span>
+                    <strong id="patientAge">—</strong>
                 </div>
 
-
                 <div class="patient-info-item">
-
-                    <span>
-                        Gender
-                    </span>
-
-                    <strong id="patientGender">
-                        —
-                    </strong>
-
+                    <span>Gender</span>
+                    <strong id="patientGender">—</strong>
                 </div>
-
 
             </div>
 
         </section>
 
 
-        <!-- ================= SCREENINGS ================= -->
-
+        <!-- Screening records -->
         <section>
 
             <div
                 id="screeningsContainer"
                 class="screenings-container"
             >
-
                 <div class="loading-message">
-
                     Loading screening history...
-
                 </div>
-
             </div>
 
         </section>
 
 
-        <!-- ================= BACK BUTTON ================= -->
-
         <button
             type="button"
             class="back-button"
-            onclick="window.location.href='screening.html'"
+            onclick="goBackToScreening()"
         >
-
             ← Back to Screening
-
         </button>
-
 
     </main>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-
     <script>
 
-
-        const BACKEND_URL =
-            "http://localhost:8084";
+        const BACKEND_URL = "http://localhost:8084";
 
 
-        /* =====================================================
-           LOAD PATIENT INFORMATION
-           ===================================================== */
-
-        const patientId =
-            localStorage.getItem("patientId");
-
-        const patientName =
-            localStorage.getItem("patientName");
-
-        const patientAge =
-            localStorage.getItem("patientAge");
-
-        const patientGender =
-            localStorage.getItem("patientGender");
+        /*
+         * Patient information is saved when a patient
+         * is selected or registered.
+         */
+        const patientId = localStorage.getItem("patientId");
+        const patientName = localStorage.getItem("patientName");
+        const patientAge = localStorage.getItem("patientAge");
+        const patientGender = localStorage.getItem("patientGender");
 
 
-        /* =====================================================
-           CHECK PATIENT
-           ===================================================== */
-
-        if (!patientId) {
-
-            document.getElementById(
-                "screeningsContainer"
-            ).innerHTML = `
-
-                <div class="error-message">
-
-                    <h3>
-                        Patient information not found
-                    </h3>
-
-                    <p>
-                        Please register or select a patient first.
-                    </p>
-
-                </div>
-
-            `;
-
-        } else {
+        const screeningsContainer =
+            document.getElementById("screeningsContainer");
 
 
-            /* =================================================
-               DISPLAY PATIENT INFORMATION
-               ================================================= */
+        /*
+         * Show the patient information stored in localStorage.
+         */
+        function showPatientInformation() {
 
-            document.getElementById(
-                "patientId"
-            ).textContent = patientId;
+            document.getElementById("patientId").textContent =
+                patientId || "—";
 
+            document.getElementById("patientName").textContent =
+                patientName || "—";
 
-            document.getElementById(
-                "patientName"
-            ).textContent = patientName || "—";
+            document.getElementById("patientAge").textContent =
+                patientAge || "—";
 
-
-            document.getElementById(
-                "patientAge"
-            ).textContent = patientAge || "—";
-
-
-            document.getElementById(
-                "patientGender"
-            ).textContent = patientGender || "—";
-
-
-            /* =================================================
-               LOAD SCREENINGS
-               ================================================= */
-
-            loadScreeningHistory();
-
+            document.getElementById("patientGender").textContent =
+                patientGender || "—";
         }
 
 
-        /* =====================================================
-           LOAD SCREENING HISTORY
-           ===================================================== */
+        /*
+         * Display a message when no patient has been selected.
+         */
+        function showMissingPatientMessage() {
 
+            screeningsContainer.innerHTML = `
+                <div class="error-message">
+                    <h3>Patient information not found</h3>
+                    <p>
+                        Please register or select a patient first.
+                    </p>
+                </div>
+            `;
+        }
+
+
+        /*
+         * Return a readable value instead of showing
+         * undefined or null in the interface.
+         */
+        function displayValue(value) {
+
+            return value === null || value === undefined || value === ""
+                ? "—"
+                : value;
+        }
+
+
+        /*
+         * Create one screening card.
+         */
+        function createScreeningCard(screening) {
+
+            const card = document.createElement("div");
+
+            card.className = "screening-card";
+
+            const grade = displayValue(screening.drGrade);
+            const drClass = displayValue(screening.drClass);
+            const confidence = screening.confidence !== null &&
+                               screening.confidence !== undefined
+                               ? `${screening.confidence}%`
+                               : "—";
+
+            const referableProbability =
+                screening.referableProbability !== null &&
+                screening.referableProbability !== undefined
+                    ? `${screening.referableProbability}%`
+                    : "—";
+
+            const referableStatus =
+                displayValue(screening.referableStatus);
+
+            const sharpness =
+                displayValue(screening.sharpness);
+
+            const brightness =
+                displayValue(screening.brightness);
+
+            const contrast =
+                displayValue(screening.contrast);
+
+            const recommendation =
+                displayValue(screening.recommendation);
+
+
+            card.innerHTML = `
+                <div class="screening-card-header">
+
+                    <h3>
+                        Screening #${screening.id}
+                    </h3>
+
+                    <div class="screening-date">
+                        Screening ID: ${screening.id}
+                    </div>
+
+                </div>
+
+
+                <div class="screening-grid">
+
+                    <div class="screening-item">
+                        <span>DR Grade</span>
+                        <strong>${grade}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>DR Class</span>
+                        <strong>${drClass}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Confidence</span>
+                        <strong>${confidence}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Referable Probability</span>
+                        <strong>${referableProbability}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Referable Status</span>
+                        <strong>${referableStatus}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Sharpness</span>
+                        <strong>${sharpness}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Brightness</span>
+                        <strong>${brightness}</strong>
+                    </div>
+
+                    <div class="screening-item">
+                        <span>Contrast</span>
+                        <strong>${contrast}</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="recommendation-box">
+
+                    <span>Recommendation</span>
+
+                    <strong>
+                        ${recommendation}
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="details-button"
+                    data-screening-id="${screening.id}"
+                >
+                    View Details
+                </button>
+            `;
+
+
+            const detailsButton =
+                card.querySelector(".details-button");
+
+
+            detailsButton.addEventListener(
+                "click",
+                () => openScreeningDetails(screening.id)
+            );
+
+
+            return card;
+        }
+
+
+        /*
+         * Fetch all screenings belonging to the current patient.
+         */
         async function loadScreeningHistory() {
-
-            const container =
-                document.getElementById(
-                    "screeningsContainer"
-                );
-
 
             try {
 
-
-                const response =
-                    await fetch(
-                        `${BACKEND_URL}/api/screenings/patient/${patientId}`
-                    );
+                const response = await fetch(
+                    `${BACKEND_URL}/api/screenings/patient/${patientId}`
+                );
 
 
                 if (!response.ok) {
-
                     throw new Error(
-                        "Failed to load screening history"
+                        "Unable to load screening history."
                     );
-
                 }
 
 
-                const screenings =
-                    await response.json();
+                const records = await response.json();
 
 
-                if (
-                    !Array.isArray(screenings) ||
-                    screenings.length === 0
-                ) {
+                if (!Array.isArray(records) || records.length === 0) {
 
-                    container.innerHTML = `
-
+                    screeningsContainer.innerHTML = `
                         <div class="empty-message">
 
-                            <h3>
-                                No Screening History
-                            </h3>
+                            <h3>No Screening History</h3>
 
                             <p>
                                 No screenings have been recorded
@@ -471,248 +474,41 @@
                             </p>
 
                         </div>
-
                     `;
 
                     return;
-
                 }
 
 
-                /* =============================================
-                   LATEST SCREENING FIRST
-                   ============================================= */
-
-                screenings.reverse();
-
-
-                container.innerHTML = "";
-
-
-                screenings.forEach(
-                    screening => {
-
-                        const card =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        card.className =
-                            "screening-card";
-
-
-                        card.innerHTML = `
-
-                            <div class="screening-card-header">
-
-                                <h3>
-                                    Screening #${screening.id}
-                                </h3>
-
-                                <div class="screening-date">
-
-                                    Screening ID:
-                                    ${screening.id}
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="screening-grid">
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        DR Grade
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.drGrade !== null &&
-                                            screening.drGrade !== undefined
-                                                ? screening.drGrade
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        DR Class
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.drClass ||
-                                            "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Confidence
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.confidence !== null &&
-                                            screening.confidence !== undefined
-                                                ? screening.confidence + "%"
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Referable Probability
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.referableProbability !== null &&
-                                            screening.referableProbability !== undefined
-                                                ? screening.referableProbability + "%"
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Referable Status
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.referableStatus ||
-                                            "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Sharpness
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.sharpness !== null &&
-                                            screening.sharpness !== undefined
-                                                ? screening.sharpness
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Brightness
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.brightness !== null &&
-                                            screening.brightness !== undefined
-                                                ? screening.brightness
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="screening-item">
-
-                                    <span>
-                                        Contrast
-                                    </span>
-
-                                    <strong>
-                                        ${
-                                            screening.contrast !== null &&
-                                            screening.contrast !== undefined
-                                                ? screening.contrast
-                                                : "—"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                            </div>
-
-
-                            <div class="recommendation-box">
-
-                                <span>
-                                    Recommendation
-                                </span>
-
-                                <strong>
-                                    ${
-                                        screening.recommendation ||
-                                        "—"
-                                    }
-                                </strong>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="details-button"
-                                onclick="viewScreeningDetails(${screening.id})"
-                            >
-
-                                View Details
-
-                            </button>
-
-
-                        `;
-
-
-                        container.appendChild(card);
-
-                    }
+                /*
+                 * Latest screening should appear first.
+                 */
+                records.sort(
+                    (a, b) => b.id - a.id
                 );
+
+
+                screeningsContainer.innerHTML = "";
+
+
+                records.forEach(record => {
+
+                    const card =
+                        createScreeningCard(record);
+
+                    screeningsContainer.appendChild(card);
+                });
 
 
             } catch (error) {
 
-
                 console.error(
-                    "Screening history error:",
+                    "Unable to load screening history:",
                     error
                 );
 
 
-                container.innerHTML = `
-
+                screeningsContainer.innerHTML = `
                     <div class="error-message">
 
                         <h3>
@@ -725,42 +521,50 @@
                         </p>
 
                     </div>
-
                 `;
-
             }
-
         }
 
 
-        /* =====================================================
-           VIEW SCREENING DETAILS
-           ===================================================== */
-
-        function viewScreeningDetails(
-            screeningId
-        ) {
-
-            /*
-             * Store selected screening ID.
-             * screening-details.html will use this ID
-             * to fetch the exact screening record.
-             */
+        /*
+         * Open the details page for a particular screening.
+         */
+        function openScreeningDetails(screeningId) {
 
             localStorage.setItem(
                 "screeningId",
                 screeningId
             );
 
-
             window.location.href =
                 "screening-details.html";
-
         }
 
 
-    </script>
+        /*
+         * Return to the screening page.
+         */
+        function goBackToScreening() {
 
+            window.location.href =
+                "screening.html";
+        }
+
+
+        /*
+         * Start the page.
+         */
+        if (!patientId) {
+
+            showMissingPatientMessage();
+
+        } else {
+
+            showPatientInformation();
+            loadScreeningHistory();
+        }
+
+    </script>
 
 </body>
 

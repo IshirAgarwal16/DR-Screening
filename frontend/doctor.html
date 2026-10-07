@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,7 +9,6 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-
         .doctor-container {
             max-width: 1200px;
             margin: 40px auto;
@@ -22,8 +19,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
             gap: 20px;
+            margin-bottom: 30px;
         }
 
         .doctor-header h1 {
@@ -55,8 +52,8 @@
 
         .stat-card span {
             display: block;
-            opacity: 0.7;
             margin-bottom: 10px;
+            opacity: 0.7;
         }
 
         .stat-card strong {
@@ -80,13 +77,11 @@
             opacity: 0.7;
         }
 
-        /* ================= FILTERS ================= */
-
         .filter-container {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         .filter-input,
@@ -138,43 +133,41 @@
             font-weight: 600;
         }
 
-        /* ================= VIEW HISTORY ================= */
-
-        .history-button {
-            padding: 9px 14px;
-            border: none;
-            border-radius: 7px;
-            cursor: pointer;
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
         }
 
-        /* ================= DELETE HISTORY ================= */
+        .action-buttons button {
+            border: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .history-button {
+            background: #4f8cff;
+            color: white;
+        }
+
+        .history-button:hover {
+            opacity: 0.85;
+        }
 
         .delete-history-button {
             background: #dc2626;
             color: white;
-            border: none;
-            padding: 9px 14px;
-            border-radius: 7px;
-            cursor: pointer;
-            margin-left: 6px;
-            font-size: 13px;
         }
 
         .delete-history-button:hover {
             background: #b91c1c;
         }
 
-        /* ================= DELETE PATIENT ================= */
-
         .delete-patient-button {
             background: #7f1d1d;
             color: white;
-            border: none;
-            padding: 9px 14px;
-            border-radius: 7px;
-            cursor: pointer;
-            margin-left: 6px;
-            font-size: 13px;
         }
 
         .delete-patient-button:hover {
@@ -188,8 +181,12 @@
             padding: 30px;
         }
 
-        @media (max-width: 768px) {
+        .error-message h3,
+        .empty-message h3 {
+            margin-bottom: 8px;
+        }
 
+        @media (max-width: 768px) {
             .doctor-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -206,20 +203,14 @@
             .patients-table {
                 min-width: 950px;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
-
+    <!-- Navigation -->
     <nav class="navbar">
-
         <div class="logo">
             DR <span>Screening</span>
         </div>
@@ -229,108 +220,65 @@
             <a href="patient.html">Patient</a>
             <a href="login.html" id="logoutLink">Logout</a>
         </nav>
-
     </nav>
 
 
-    <!-- ================= DOCTOR DASHBOARD ================= -->
-
     <main class="doctor-container">
 
-
-        <!-- HEADER -->
-
-        <div class="doctor-header">
-
+        <!-- Dashboard heading -->
+        <header class="doctor-header">
             <div>
-
                 <div class="section-label">
                     CLINICAL DASHBOARD
                 </div>
 
-                <h1>
-                    Doctor Dashboard
-                </h1>
+                <h1>Doctor Dashboard</h1>
 
                 <p>
                     Review patient screening records and AI-assisted results.
                 </p>
-
             </div>
-
 
             <div class="doctor-badge">
                 👨‍⚕️ Doctor
             </div>
+        </header>
 
-        </div>
 
-
-        <!-- ================= STATISTICS ================= -->
-
-        <div class="stats-grid">
-
+        <!-- Dashboard statistics -->
+        <section class="stats-grid">
 
             <div class="stat-card">
-
-                <span>
-                    Total Patients
-                </span>
-
-                <strong id="totalPatients">
-                    0
-                </strong>
-
+                <span>Total Patients</span>
+                <strong id="totalPatients">0</strong>
             </div>
-
 
             <div class="stat-card">
-
-                <span>
-                    Total Screenings
-                </span>
-
-                <strong id="totalScreenings">
-                    0
-                </strong>
-
+                <span>Total Screenings</span>
+                <strong id="totalScreenings">0</strong>
             </div>
-
 
             <div class="stat-card">
-
-                <span>
-                    Referable Cases
-                </span>
-
-                <strong id="referableCases">
-                    0
-                </strong>
-
+                <span>Referable Cases</span>
+                <strong id="referableCases">0</strong>
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- ================= PATIENT LIST ================= -->
-
+        <!-- Patient section -->
         <section class="patients-card">
 
             <div class="patients-card-header">
-
-                <h2>
-                    Patients
-                </h2>
+                <h2>Patients</h2>
 
                 <p>
                     Select a patient to view their screening history.
                 </p>
-
             </div>
 
 
-            <!-- ================= SEARCH & FILTERS ================= -->
-
+            <!-- Search and filters -->
             <div class="filter-container">
 
                 <input
@@ -338,15 +286,9 @@
                     id="patientSearch"
                     class="filter-input"
                     placeholder="🔍 Search by Patient ID or Name..."
-                    oninput="applyFilters()"
                 >
 
-
-                <select
-                    id="genderFilter"
-                    class="filter-select"
-                    onchange="applyFilters()"
-                >
+                <select id="genderFilter" class="filter-select">
 
                     <option value="all">
                         All Genders
@@ -367,11 +309,7 @@
                 </select>
 
 
-                <select
-                    id="screeningFilter"
-                    class="filter-select"
-                    onchange="applyFilters()"
-                >
+                <select id="screeningFilter" class="filter-select">
 
                     <option value="all">
                         All Patients
@@ -402,109 +340,96 @@
             </div>
 
 
+            <!-- Patient table -->
             <div
                 id="patientsContainer"
                 class="table-container"
             >
-
                 <div class="loading-message">
                     Loading patients...
                 </div>
-
             </div>
 
         </section>
 
-
     </main>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-
     <script>
+
+        /* -------------------------------------------------------
+           Configuration
+        ------------------------------------------------------- */
 
         const BACKEND_URL = "http://localhost:8084";
 
 
+        /* -------------------------------------------------------
+           Application state
+        ------------------------------------------------------- */
+
         let patients = [];
-        let allScreenings = [];
+        let screenings = [];
 
 
-        /* =====================================================
-           LOAD DASHBOARD
-           ===================================================== */
+        /* -------------------------------------------------------
+           DOM helpers
+        ------------------------------------------------------- */
 
-        async function loadDashboard() {
+        const getElement = (id) => {
+            return document.getElementById(id);
+        };
+
+
+        /* -------------------------------------------------------
+           Load patients
+        ------------------------------------------------------- */
+
+        async function loadPatients() {
 
             try {
 
-                const patientsResponse = await fetch(
+                const response = await fetch(
                     `${BACKEND_URL}/api/patients`
                 );
 
-
-                if (!patientsResponse.ok) {
-
-                    throw new Error(
-                        "Failed to load patients"
-                    );
-
+                if (!response.ok) {
+                    throw new Error("Unable to fetch patients.");
                 }
 
+                patients = await response.json();
 
-                patients = await patientsResponse.json();
+                getElement("totalPatients").textContent =
+                    patients.length;
 
+                await loadScreeningData();
 
-                document.getElementById(
-                    "totalPatients"
-                ).textContent = patients.length;
+                applyFilters();
 
+            } catch (error) {
 
-                await loadAllScreenings();
+                console.error("Patient loading error:", error);
 
-
-                displayPatients();
-
-            }
-
-
-            catch (error) {
-
-                console.error(error);
-
-
-                document.getElementById(
-                    "patientsContainer"
-                ).innerHTML = `
-
+                getElement("patientsContainer").innerHTML = `
                     <div class="error-message">
-
-                        <h3>
-                            Unable to load dashboard
-                        </h3>
-
+                        <h3>Unable to load dashboard</h3>
                         <p>
                             Please make sure Spring Boot
                             is running on port 8084.
                         </p>
-
                     </div>
-
                 `;
-
             }
-
         }
 
 
-        /* =====================================================
-           LOAD SCREENINGS
-           ===================================================== */
+        /* -------------------------------------------------------
+           Load screening records
+        ------------------------------------------------------- */
 
-        async function loadAllScreenings() {
+        async function loadScreeningData() {
 
-            allScreenings = [];
-
+            screenings = [];
 
             for (const patient of patients) {
 
@@ -514,164 +439,101 @@
                         `${BACKEND_URL}/api/screenings/patient/${patient.id}`
                     );
 
-
                     if (!response.ok) {
                         continue;
                     }
 
+                    const records = await response.json();
 
-                    const screenings =
-                        await response.json();
-
-
-                    if (Array.isArray(screenings)) {
-
-                        allScreenings.push(
-                            ...screenings
-                        );
-
+                    if (Array.isArray(records)) {
+                        screenings.push(...records);
                     }
 
-                }
-
-
-                catch (error) {
+                } catch (error) {
 
                     console.error(
                         `Could not load screenings for patient ${patient.id}`,
                         error
                     );
-
                 }
-
             }
 
-
-            updateStats();
-
+            updateStatistics();
         }
 
 
-        /* =====================================================
-           UPDATE DASHBOARD STATISTICS
-           ===================================================== */
+        /* -------------------------------------------------------
+           Update dashboard statistics
+        ------------------------------------------------------- */
 
-        function updateStats() {
+        function updateStatistics() {
 
-            document.getElementById(
-                "totalPatients"
-            ).textContent = patients.length;
+            getElement("totalPatients").textContent =
+                patients.length;
 
+            getElement("totalScreenings").textContent =
+                screenings.length;
 
-            document.getElementById(
-                "totalScreenings"
-            ).textContent = allScreenings.length;
+            const referableTotal = screenings.filter(
+                record =>
+                    record.referableStatus === "Referable DR"
+            ).length;
 
-
-            const referableCount =
-                allScreenings.filter(
-                    screening =>
-                        screening.referableStatus ===
-                        "Referable DR"
-                ).length;
-
-
-            document.getElementById(
-                "referableCases"
-            ).textContent = referableCount;
-
+            getElement("referableCases").textContent =
+                referableTotal;
         }
 
 
-        /* =====================================================
-           DISPLAY PATIENTS
-           ===================================================== */
+        /* -------------------------------------------------------
+           Render patient table
+        ------------------------------------------------------- */
 
-        function displayPatients(patientList = patients) {
+        function renderPatients(list) {
 
             const container =
-                document.getElementById(
-                    "patientsContainer"
-                );
+                getElement("patientsContainer");
 
 
-            if (!patientList || patientList.length === 0) {
+            if (!list.length) {
 
                 container.innerHTML = `
-
                     <div class="empty-message">
-
-                        <h3>
-                            No Patients Found
-                        </h3>
-
+                        <h3>No Patients Found</h3>
                         <p>
                             No patients match the selected filters.
                         </p>
-
                     </div>
-
                 `;
 
                 return;
-
             }
 
 
-            let tableHTML = `
-
+            let html = `
                 <table class="patients-table">
 
                     <thead>
-
                         <tr>
-
-                            <th>
-                                Patient ID
-                            </th>
-
-                            <th>
-                                Name
-                            </th>
-
-                            <th>
-                                Age
-                            </th>
-
-                            <th>
-                                Gender
-                            </th>
-
-                            <th>
-                                Screenings
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
+                            <th>Patient ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Screenings</th>
+                            <th>Action</th>
                         </tr>
-
                     </thead>
 
-
                     <tbody>
-
             `;
 
 
-            patientList.forEach(patient => {
+            list.forEach(patient => {
 
-                const patientScreenings =
-                    allScreenings.filter(
-                        screening =>
-                            screening.patientId ===
-                            patient.id
-                    );
+                const patientRecords =
+                    getPatientScreenings(patient.id);
 
 
-                tableHTML += `
-
+                html += `
                     <tr>
 
                         <td>
@@ -691,214 +553,174 @@
                         </td>
 
                         <td>
-                            ${patientScreenings.length}
+                            ${patientRecords.length}
                         </td>
 
                         <td>
 
-                            <button
-                                class="history-button"
-                                onclick="viewPatientHistory(${patient.id})"
-                            >
-                                View History
-                            </button>
+                            <div class="action-buttons">
 
-                            <button
-                                class="delete-history-button"
-                                onclick="deletePatientHistory(${patient.id}, '${escapeHTML(patient.name)}')"
-                            >
-                                Delete History
-                            </button>
+                                <button
+                                    class="history-button"
+                                    onclick="viewHistory(${patient.id})"
+                                >
+                                    View History
+                                </button>
 
-                            <button
-                                class="delete-patient-button"
-                                onclick="deletePatient(${patient.id}, '${escapeHTML(patient.name)}')"
-                            >
-                                Delete Patient
-                            </button>
+                                <button
+                                    class="delete-history-button"
+                                    onclick="removeHistory(${patient.id})"
+                                >
+                                    Delete History
+                                </button>
+
+                                <button
+                                    class="delete-patient-button"
+                                    onclick="removePatient(${patient.id})"
+                                >
+                                    Delete Patient
+                                </button>
+
+                            </div>
 
                         </td>
 
                     </tr>
-
                 `;
-
             });
 
 
-            tableHTML += `
-
+            html += `
                     </tbody>
-
                 </table>
-
             `;
 
 
-            container.innerHTML = tableHTML;
-
+            container.innerHTML = html;
         }
 
 
-        /* =====================================================
-           SEARCH + FILTER
-           ===================================================== */
+        /* -------------------------------------------------------
+           Get screenings belonging to a patient
+        ------------------------------------------------------- */
+
+        function getPatientScreenings(patientId) {
+
+            return screenings.filter(
+                record => record.patientId === patientId
+            );
+        }
+
+
+        /* -------------------------------------------------------
+           Search and filter patients
+        ------------------------------------------------------- */
 
         function applyFilters() {
 
-            const searchValue =
-                document.getElementById(
-                    "patientSearch"
-                ).value
-                .trim()
-                .toLowerCase();
+            const searchText =
+                getElement("patientSearch")
+                    .value
+                    .trim()
+                    .toLowerCase();
 
 
-            const genderValue =
-                document.getElementById(
-                    "genderFilter"
-                ).value
-                .toLowerCase();
+            const selectedGender =
+                getElement("genderFilter").value
+                    .toLowerCase();
 
 
-            const screeningValue =
-                document.getElementById(
-                    "screeningFilter"
-                ).value;
+            const screeningMode =
+                getElement("screeningFilter").value;
 
 
-            const filteredPatients =
-                patients.filter(patient => {
+            const filtered = patients.filter(patient => {
 
-                    /* =========================
-                       SEARCH
-                       ========================= */
+                /* Search */
 
-                    const patientId =
-                        String(patient.id)
+                const idText =
+                    String(patient.id).toLowerCase();
+
+                const nameText =
+                    String(patient.name || "").toLowerCase();
+
+                const searchMatch =
+                    idText.includes(searchText) ||
+                    nameText.includes(searchText);
+
+
+                if (!searchMatch) {
+                    return false;
+                }
+
+
+                /* Gender */
+
+                const gender =
+                    String(patient.gender || "")
                         .toLowerCase();
 
-                    const patientName =
-                        String(patient.name || "")
-                        .toLowerCase();
+                const genderMatch =
+                    selectedGender === "all" ||
+                    gender === selectedGender;
 
 
-                    const matchesSearch =
-                        patientId.includes(searchValue) ||
-                        patientName.includes(searchValue);
+                if (!genderMatch) {
+                    return false;
+                }
 
 
-                    if (!matchesSearch) {
-                        return false;
-                    }
+                /* Screening status */
+
+                const patientRecords =
+                    getPatientScreenings(patient.id);
 
 
-                    /* =========================
-                       GENDER FILTER
-                       ========================= */
-
-                    const patientGender =
-                        String(patient.gender || "")
-                        .toLowerCase();
+                if (screeningMode === "screened") {
+                    return patientRecords.length > 0;
+                }
 
 
-                    const matchesGender =
-                        genderValue === "all" ||
-                        patientGender === genderValue;
+                if (screeningMode === "unscreened") {
+                    return patientRecords.length === 0;
+                }
 
 
-                    if (!matchesGender) {
-                        return false;
-                    }
+                if (screeningMode === "referable") {
+
+                    return patientRecords.some(
+                        record =>
+                            record.referableStatus === "Referable DR"
+                    );
+                }
 
 
-                    /* =========================
-                       SCREENING FILTER
-                       ========================= */
-
-                    const patientScreenings =
-                        allScreenings.filter(
-                            screening =>
-                                screening.patientId ===
-                                patient.id
-                        );
+                return true;
+            });
 
 
-                    if (
-                        screeningValue ===
-                        "screened"
-                    ) {
-
-                        return patientScreenings.length > 0;
-
-                    }
+            getElement("filterSummary").textContent =
+                `Showing ${filtered.length} of ${patients.length} patients`;
 
 
-                    if (
-                        screeningValue ===
-                        "unscreened"
-                    ) {
-
-                        return patientScreenings.length === 0;
-
-                    }
-
-
-                    if (
-                        screeningValue ===
-                        "referable"
-                    ) {
-
-                        return patientScreenings.some(
-                            screening =>
-                                screening.referableStatus ===
-                                "Referable DR"
-                        );
-
-                    }
-
-
-                    return true;
-
-                });
-
-
-            /* =========================
-               UPDATE SUMMARY
-               ========================= */
-
-            document.getElementById(
-                "filterSummary"
-            ).textContent =
-                `Showing ${filteredPatients.length} of ${patients.length} patients`;
-
-
-            displayPatients(filteredPatients);
-
+            renderPatients(filtered);
         }
 
 
-        /* =====================================================
-           VIEW PATIENT HISTORY
-           ===================================================== */
+        /* -------------------------------------------------------
+           Open patient screening history
+        ------------------------------------------------------- */
 
-        function viewPatientHistory(patientId) {
+        function viewHistory(patientId) {
 
             const patient =
-                patients.find(
-                    p => p.id === patientId
-                );
+                patients.find(item => item.id === patientId);
 
 
             if (!patient) {
                 return;
             }
 
-
-            /*
-             * Store selected patient temporarily.
-             * history.html will use these values.
-             */
 
             localStorage.setItem(
                 "patientId",
@@ -923,54 +745,47 @@
 
             window.location.href =
                 "history.html";
-
         }
 
 
-        /* =====================================================
-           DELETE PATIENT SCREENING HISTORY
-           ===================================================== */
+        /* -------------------------------------------------------
+           Delete screening history
+        ------------------------------------------------------- */
 
-        async function deletePatientHistory(
-            patientId,
-            patientName
-        ) {
+        async function removeHistory(patientId) {
 
-            const patientScreenings =
-                allScreenings.filter(
-                    screening =>
-                        screening.patientId === patientId
-                );
+            const patient =
+                patients.find(item => item.id === patientId);
 
 
-            /* ==========================================
-               CHECK IF HISTORY EXISTS
-               ========================================== */
+            if (!patient) {
+                return;
+            }
 
-            if (patientScreenings.length === 0) {
+
+            const patientRecords =
+                getPatientScreenings(patientId);
+
+
+            if (patientRecords.length === 0) {
 
                 alert(
-                    `No screening history found for ${patientName}.`
+                    `No screening history found for ${patient.name}.`
                 );
 
                 return;
             }
 
 
-            /* ==========================================
-               CONFIRM DELETE
-               ========================================== */
-
             const confirmed = confirm(
 
-                `Are you sure you want to delete ALL screening history for ${patientName} (Patient ID: ${patientId})?\n\n` +
+                `Are you sure you want to delete ALL screening history for ${patient.name} (Patient ID: ${patient.id})?\n\n` +
 
-                `This will delete ${patientScreenings.length} screening record(s).\n\n` +
+                `This will delete ${patientRecords.length} screening record(s).\n\n` +
 
                 `The patient record itself will NOT be deleted.\n\n` +
 
                 `This action cannot be undone.`
-
             );
 
 
@@ -982,13 +797,10 @@
             try {
 
                 const response = await fetch(
-
                     `${BACKEND_URL}/api/screenings/patient/${patientId}`,
-
                     {
                         method: "DELETE"
                     }
-
                 );
 
 
@@ -1000,86 +812,70 @@
                             "No screening history was found for this patient."
                         );
 
-                    }
-
-                    else {
+                    } else {
 
                         alert(
                             "Failed to delete screening history."
                         );
-
                     }
 
                     return;
                 }
 
 
-                /* ==========================================
-                   REMOVE SCREENINGS FROM FRONTEND
-                   ========================================== */
+                /* Remove deleted records locally */
 
-                allScreenings =
-                    allScreenings.filter(
-                        screening =>
-                            screening.patientId !== patientId
-                    );
+                screenings = screenings.filter(
+                    record =>
+                        record.patientId !== patientId
+                );
 
 
-                /* ==========================================
-                   UPDATE STATISTICS
-                   ========================================== */
-
-                updateStats();
-
-
-                /* ==========================================
-                   RE-APPLY CURRENT FILTERS
-                   ========================================== */
-
+                updateStatistics();
                 applyFilters();
 
 
                 alert(
-                    `Screening history for ${patientName} has been deleted successfully.`
+                    `Screening history for ${patient.name} has been deleted successfully.`
                 );
 
-            }
 
-
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Error deleting screening history:",
+                    "History deletion error:",
                     error
                 );
-
 
                 alert(
                     "Unable to delete screening history. Please make sure the backend is running."
                 );
-
             }
-
         }
 
 
-        /* =====================================================
-           DELETE COMPLETE PATIENT
-           ===================================================== */
+        /* -------------------------------------------------------
+           Delete complete patient
+        ------------------------------------------------------- */
 
-        async function deletePatient(
-            patientId,
-            patientName
-        ) {
+        async function removePatient(patientId) {
+
+            const patient =
+                patients.find(item => item.id === patientId);
+
+
+            if (!patient) {
+                return;
+            }
+
 
             const confirmed = confirm(
 
-                `Are you sure you want to permanently delete ${patientName} (Patient ID: ${patientId})?\n\n` +
+                `Are you sure you want to permanently delete ${patient.name} (Patient ID: ${patient.id})?\n\n` +
 
                 `This will delete the patient AND ALL of their screening history.\n\n` +
 
                 `This action cannot be undone.`
-
             );
 
 
@@ -1091,113 +887,70 @@
             try {
 
                 const response = await fetch(
-
                     `${BACKEND_URL}/api/patients/${patientId}`,
-
                     {
                         method: "DELETE"
                     }
-
                 );
 
-
-                /* ==========================================
-                   HANDLE RESPONSE
-                   ========================================== */
 
                 if (!response.ok) {
 
                     if (response.status === 404) {
 
-                        alert(
-                            "Patient not found."
-                        );
+                        alert("Patient not found.");
 
-                    }
+                    } else {
 
-                    else {
-
-                        alert(
-                            "Failed to delete patient."
-                        );
-
+                        alert("Failed to delete patient.");
                     }
 
                     return;
                 }
 
 
-                /* ==========================================
-                   REMOVE PATIENT FROM FRONTEND
-                   ========================================== */
+                /* Update local patient list */
 
-                patients =
-                    patients.filter(
-                        patient =>
-                            patient.id !== patientId
-                    );
+                patients = patients.filter(
+                    item =>
+                        item.id !== patientId
+                );
 
 
-                /* ==========================================
-                   REMOVE PATIENT SCREENINGS
-                   ========================================== */
+                /* Remove related screenings */
 
-                allScreenings =
-                    allScreenings.filter(
-                        screening =>
-                            screening.patientId !== patientId
-                    );
+                screenings = screenings.filter(
+                    record =>
+                        record.patientId !== patientId
+                );
 
 
-                /* ==========================================
-                   UPDATE STATISTICS
-                   ========================================== */
-
-                updateStats();
-
-
-                /* ==========================================
-                   RE-APPLY CURRENT FILTERS
-                   ========================================== */
-
+                updateStatistics();
                 applyFilters();
 
 
-                /* ==========================================
-                   SUCCESS MESSAGE
-                   ========================================== */
-
                 alert(
-
-                    `${patientName} and their screening history have been deleted successfully.`
-
+                    `${patient.name} and their screening history have been deleted successfully.`
                 );
 
-            }
 
-
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Error deleting patient:",
+                    "Patient deletion error:",
                     error
                 );
 
-
                 alert(
-
                     "Unable to delete patient. Please make sure the backend is running."
-
                 );
-
             }
-
         }
 
 
-        /* =====================================================
-           HTML SAFETY
-           ===================================================== */
+        /* -------------------------------------------------------
+           Prevent HTML injection when displaying user data
+        ------------------------------------------------------- */
 
         function escapeHTML(value) {
 
@@ -1205,36 +958,51 @@
                 value === null ||
                 value === undefined
             ) {
-
                 return "";
-
             }
 
 
             return String(value)
-
                 .replace(/&/g, "&amp;")
-
                 .replace(/</g, "&lt;")
-
                 .replace(/>/g, "&gt;")
-
                 .replace(/"/g, "&quot;")
-
                 .replace(/'/g, "&#039;");
-
         }
 
 
-        /* =====================================================
-           START DASHBOARD
-           ===================================================== */
+        /* -------------------------------------------------------
+           Filter event listeners
+        ------------------------------------------------------- */
 
-        loadDashboard();
+        getElement("patientSearch")
+            .addEventListener(
+                "input",
+                applyFilters
+            );
+
+
+        getElement("genderFilter")
+            .addEventListener(
+                "change",
+                applyFilters
+            );
+
+
+        getElement("screeningFilter")
+            .addEventListener(
+                "change",
+                applyFilters
+            );
+
+
+        /* -------------------------------------------------------
+           Start dashboard
+        ------------------------------------------------------- */
+
+        loadPatients();
 
     </script>
 
-
 </body>
-
 </html>

@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>DR Screening | Screening Details</title>
@@ -12,11 +10,14 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+        /* Screening details layout */
 
         .details-container {
+            width: 100%;
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         .details-header {
@@ -24,12 +25,15 @@
         }
 
         .details-header h1 {
-            margin-bottom: 8px;
+            margin: 0 0 8px;
         }
 
         .details-header p {
+            margin: 0;
             opacity: 0.7;
         }
+
+        /* Information cards */
 
         .patient-card,
         .result-card,
@@ -37,8 +41,9 @@
         .images-card,
         .recommendation-card {
             padding: 25px;
-            border-radius: 14px;
             margin-bottom: 25px;
+            border-radius: 14px;
+            box-sizing: border-box;
         }
 
         .patient-grid,
@@ -52,16 +57,16 @@
 
         .info-item span {
             display: block;
-            opacity: 0.6;
-            font-size: 14px;
             margin-bottom: 6px;
+            font-size: 14px;
+            opacity: 0.6;
         }
 
         .info-item strong {
             font-size: 17px;
         }
 
-        /* ================= IMAGES ================= */
+        /* Screening images */
 
         .images-grid {
             display: grid;
@@ -75,55 +80,82 @@
         }
 
         .image-box h3 {
-            margin-bottom: 15px;
+            margin: 0 0 15px;
         }
 
         .screening-image {
+            display: block;
             width: 100%;
             max-height: 500px;
+            margin: auto;
             object-fit: contain;
             border-radius: 10px;
-            display: block;
-            margin: auto;
         }
 
         .image-placeholder {
             min-height: 250px;
+            padding: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px;
             border-radius: 10px;
             opacity: 0.7;
+            box-sizing: border-box;
         }
 
-        /* ================= RECOMMENDATION ================= */
+        /* Recommendation */
 
         .recommendation-box {
+            margin-top: 15px;
             padding: 20px;
             border-radius: 10px;
-            margin-top: 15px;
         }
 
-        /* ================= BUTTON ================= */
+        /* Buttons */
 
-        .back-button {
+        .report-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .back-button,
+        .report-button {
             padding: 11px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 14px;
         }
 
-        /* ================= STATUS ================= */
+        .report-button {
+            background: #2563eb;
+            color: #ffffff;
+            transition: 0.2s ease;
+        }
+
+        .report-button:hover {
+            background: #1d4ed8;
+        }
+
+        .report-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Loading and error states */
 
         .loading-message,
         .error-message {
-            text-align: center;
             padding: 40px;
+            text-align: center;
         }
 
-        /* ================= RESPONSIVE ================= */
+        /* Responsive design */
 
         @media (max-width: 900px) {
 
@@ -136,10 +168,14 @@
             .images-grid {
                 grid-template-columns: 1fr;
             }
-
         }
 
         @media (max-width: 600px) {
+
+            .details-container {
+                margin: 20px auto;
+                padding: 15px;
+            }
 
             .patient-grid,
             .result-grid,
@@ -147,17 +183,29 @@
                 grid-template-columns: 1fr;
             }
 
+            .patient-card,
+            .result-card,
+            .quality-card,
+            .images-card,
+            .recommendation-card {
+                padding: 20px;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+
+            .back-button,
+            .report-button {
+                width: 100%;
+            }
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-    <!-- ================= NAVBAR ================= -->
+    <!-- Navigation -->
 
     <nav class="navbar">
 
@@ -166,7 +214,6 @@
         </div>
 
         <nav>
-
             <a href="index.html">
                 Home
             </a>
@@ -178,20 +225,16 @@
             <a href="login.html">
                 Logout
             </a>
-
         </nav>
 
     </nav>
 
 
-    <!-- ================= MAIN ================= -->
+    <!-- Main content -->
 
     <main class="details-container">
 
-
-        <!-- ================= HEADER ================= -->
-
-        <div class="details-header">
+        <header class="details-header">
 
             <div class="section-label">
                 SCREENING REVIEW
@@ -206,64 +249,66 @@
                 screening report.
             </p>
 
-        </div>
+        </header>
 
 
-        <!-- ================= CONTENT ================= -->
+        <!-- Screening information is loaded here -->
 
         <div id="detailsContent">
 
             <div class="loading-message">
-
                 Loading screening details...
-
             </div>
 
         </div>
 
 
-        <!-- ================= BACK BUTTON ================= -->
+        <!-- Report actions -->
 
-        <button
-            type="button"
-            class="back-button"
-            onclick="window.location.href='history.html'"
-        >
+        <div class="report-actions">
 
-            ← Back to History
+            <button
+                type="button"
+                class="back-button"
+                onclick="window.location.href='history.html'"
+            >
+                ← Back to History
+            </button>
 
-        </button>
+            <button
+                type="button"
+                class="report-button"
+                onclick="generatePDFReport()"
+            >
+                Generate PDF Report
+            </button>
 
+        </div>
 
     </main>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-
     <script>
 
+        const BACKEND_URL = "http://localhost:8084";
 
-        const BACKEND_URL =
-            "http://localhost:8084";
-
-
-        /* =====================================================
-           GET SELECTED SCREENING ID
-           ===================================================== */
+        /*
+         * The history page stores the selected
+         * screening ID before opening this page.
+         */
 
         const screeningId =
             localStorage.getItem("screeningId");
 
 
-        /* =====================================================
-           CHECK SCREENING ID
-           ===================================================== */
+        /*
+         * If there is no screening ID, there is
+         * nothing to display.
+         */
 
         if (!screeningId) {
 
-            document.getElementById(
-                "detailsContent"
-            ).innerHTML = `
+            document.getElementById("detailsContent").innerHTML = `
 
                 <div class="error-message">
 
@@ -287,25 +332,20 @@
         }
 
 
-        /* =====================================================
-           LOAD SCREENING DETAILS
-           ===================================================== */
+        /*
+         * Load screening details from Spring Boot.
+         */
 
         async function loadScreeningDetails() {
 
             const container =
-                document.getElementById(
-                    "detailsContent"
-                );
-
+                document.getElementById("detailsContent");
 
             try {
 
-                const response =
-                    await fetch(
-                        `${BACKEND_URL}/api/screenings/${screeningId}`
-                    );
-
+                const response = await fetch(
+                    `${BACKEND_URL}/api/screenings/${screeningId}`
+                );
 
                 if (!response.ok) {
 
@@ -315,21 +355,15 @@
 
                 }
 
-
                 const screening =
                     await response.json();
-
 
                 console.log(
                     "Screening details:",
                     screening
                 );
 
-
-                displayScreeningDetails(
-                    screening
-                );
-
+                displayScreeningDetails(screening);
 
             } catch (error) {
 
@@ -337,7 +371,6 @@
                     "Screening details error:",
                     error
                 );
-
 
                 container.innerHTML = `
 
@@ -357,60 +390,40 @@
                 `;
 
             }
-
         }
 
 
-        /* =====================================================
-           DISPLAY SCREENING DETAILS
-           ===================================================== */
+        /*
+         * Display the screening information.
+         */
 
-        function displayScreeningDetails(
-            screening
-        ) {
+        function displayScreeningDetails(screening) {
 
             const container =
-                document.getElementById(
-                    "detailsContent"
-                );
+                document.getElementById("detailsContent");
 
 
-            /* =================================================
-               PATIENT INFORMATION
-               ================================================= */
+            // Patient information
 
             const patientName =
-                localStorage.getItem(
-                    "patientName"
-                ) || "—";
-
+                localStorage.getItem("patientName") || "—";
 
             const patientAge =
-                localStorage.getItem(
-                    "patientAge"
-                ) || "—";
-
+                localStorage.getItem("patientAge") || "—";
 
             const patientGender =
-                localStorage.getItem(
-                    "patientGender"
-                ) || "—";
+                localStorage.getItem("patientGender") || "—";
 
 
-            /* =================================================
-               ORIGINAL FUNDUS IMAGE
-               ================================================= */
+            // Original fundus image
 
             let originalImageHTML = `
 
                 <div class="image-placeholder">
-
                     Original fundus image not available.
-
                 </div>
 
             `;
-
 
             if (
                 screening.originalImage &&
@@ -422,14 +435,12 @@
 
 
                 /*
-                 * If the database contains only Base64
-                 * data, add the image prefix.
+                 * The database may contain either a complete
+                 * data URL or only the Base64 string.
                  */
 
                 if (
-                    !originalImageSrc.startsWith(
-                        "data:image"
-                    )
+                    !originalImageSrc.startsWith("data:image")
                 ) {
 
                     originalImageSrc =
@@ -452,20 +463,15 @@
             }
 
 
-            /* =================================================
-               GRAD-CAM IMAGE
-               ================================================= */
+            // Grad-CAM image
 
             let gradcamImageHTML = `
 
                 <div class="image-placeholder">
-
                     Grad-CAM image not available.
-
                 </div>
 
             `;
-
 
             if (
                 screening.gradcamImage &&
@@ -477,21 +483,12 @@
 
 
                 /*
-                 * FastAPI may return:
-                 *
-                 * data:image/png;base64,...
-                 *
-                 * OR
-                 *
-                 * iVBORw0KGgo...
-                 *
-                 * Add the prefix only when required.
+                 * FastAPI may return a complete data URL
+                 * or only the Base64 image string.
                  */
 
                 if (
-                    !gradcamSrc.startsWith(
-                        "data:image"
-                    )
+                    !gradcamSrc.startsWith("data:image")
                 ) {
 
                     gradcamSrc =
@@ -515,27 +512,19 @@
             }
 
 
-            /* =================================================
-               BUILD PAGE
-               ================================================= */
+            // Build the result page
 
             container.innerHTML = `
 
-
-                <!-- =========================================
-                     PATIENT INFORMATION
-                ========================================== -->
+                <!-- Patient information -->
 
                 <section class="patient-card">
-
 
                     <div class="section-label">
                         PATIENT INFORMATION
                     </div>
 
-
                     <div class="patient-grid">
-
 
                         <div class="info-item">
 
@@ -544,10 +533,7 @@
                             </span>
 
                             <strong>
-                                ${
-                                    screening.patientId ??
-                                    "—"
-                                }
+                                ${screening.patientId ?? "—"}
                             </strong>
 
                         </div>
@@ -560,11 +546,7 @@
                             </span>
 
                             <strong>
-                                ${
-                                    escapeHTML(
-                                        patientName
-                                    )
-                                }
+                                ${escapeHTML(patientName)}
                             </strong>
 
                         </div>
@@ -577,11 +559,7 @@
                             </span>
 
                             <strong>
-                                ${
-                                    escapeHTML(
-                                        patientAge
-                                    )
-                                }
+                                ${escapeHTML(patientAge)}
                             </strong>
 
                         </div>
@@ -594,36 +572,25 @@
                             </span>
 
                             <strong>
-                                ${
-                                    escapeHTML(
-                                        patientGender
-                                    )
-                                }
+                                ${escapeHTML(patientGender)}
                             </strong>
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
-                <!-- =========================================
-                     AI SCREENING RESULT
-                ========================================== -->
+                <!-- AI screening result -->
 
                 <section class="result-card">
-
 
                     <div class="section-label">
                         AI SCREENING RESULT
                     </div>
 
-
                     <div class="result-grid">
-
 
                         <div class="info-item">
 
@@ -632,10 +599,7 @@
                             </span>
 
                             <strong>
-                                ${
-                                    screening.id ??
-                                    "—"
-                                }
+                                ${screening.id ?? "—"}
                             </strong>
 
                         </div>
@@ -648,10 +612,7 @@
                             </span>
 
                             <strong>
-                                ${
-                                    screening.drGrade ??
-                                    "—"
-                                }
+                                ${screening.drGrade ?? "—"}
                             </strong>
 
                         </div>
@@ -664,12 +625,9 @@
                             </span>
 
                             <strong>
-                                ${
-                                    escapeHTML(
-                                        screening.drClass ||
-                                        "—"
-                                    )
-                                }
+                                ${escapeHTML(
+                                    screening.drClass || "—"
+                                )}
                             </strong>
 
                         </div>
@@ -700,12 +658,9 @@
                             </span>
 
                             <strong>
-                                ${
-                                    escapeHTML(
-                                        screening.referableStatus ||
-                                        "—"
-                                    )
-                                }
+                                ${escapeHTML(
+                                    screening.referableStatus || "—"
+                                )}
                             </strong>
 
                         </div>
@@ -728,27 +683,20 @@
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
-                <!-- =========================================
-                     IMAGE QUALITY
-                ========================================== -->
+                <!-- Image quality -->
 
                 <section class="quality-card">
-
 
                     <div class="section-label">
                         IMAGE QUALITY
                     </div>
 
-
                     <div class="quality-grid">
-
 
                         <div class="info-item">
 
@@ -803,80 +751,56 @@
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
-                <!-- =========================================
-                     AI EXPLANATION
-                ========================================== -->
+                <!-- Images and explainability -->
 
                 <section class="images-card">
-
 
                     <div class="section-label">
                         AI EXPLANATION
                     </div>
 
-
                     <div class="images-grid">
 
-
-                        <!-- ORIGINAL FUNDUS -->
-
                         <div class="image-box">
-
 
                             <h3>
                                 Original Fundus Image
                             </h3>
 
-
                             ${originalImageHTML}
-
 
                         </div>
 
 
-                        <!-- GRAD-CAM -->
-
                         <div class="image-box">
-
 
                             <h3>
                                 Grad-CAM
                             </h3>
 
-
                             ${gradcamImageHTML}
-
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
-                <!-- =========================================
-                     RECOMMENDATION
-                ========================================== -->
+                <!-- Recommendation -->
 
                 <section class="recommendation-card">
-
 
                     <div class="section-label">
                         RECOMMENDATION
                     </div>
 
-
                     <div class="recommendation-box">
-
 
                         ${
                             escapeHTML(
@@ -885,32 +809,26 @@
                             )
                         }
 
-
                     </div>
 
-
                 </section>
-
 
             `;
 
         }
 
 
-        /* =====================================================
-           GRAD-CAM ERROR HANDLER
-           ===================================================== */
+        /*
+         * Show a message when the Grad-CAM image
+         * cannot be loaded.
+         */
 
-        function showGradcamError(
-            image
-        ) {
+        function showGradcamError(image) {
 
             image.outerHTML = `
 
                 <div class="image-placeholder">
-
                     Grad-CAM image could not be loaded.
-
                 </div>
 
             `;
@@ -918,13 +836,12 @@
         }
 
 
-        /* =====================================================
-           HTML SAFETY
-           ===================================================== */
+        /*
+         * Basic HTML escaping for values coming
+         * from localStorage or the database.
+         */
 
-        function escapeHTML(
-            value
-        ) {
+        function escapeHTML(value) {
 
             if (
                 value === null ||
@@ -935,39 +852,117 @@
 
             }
 
-
             return String(value)
-
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
 
         }
 
 
-    </script>
+        /*
+         * Generate and download the PDF report.
+         *
+         * The actual PDF is created by Spring Boot.
+         * This function only requests the PDF and
+         * downloads the returned file.
+         */
 
+        async function generatePDFReport() {
+
+            if (!screeningId) {
+
+                alert(
+                    "Screening information not found."
+                );
+
+                return;
+
+            }
+
+
+            const button =
+                document.querySelector(".report-button");
+
+
+            try {
+
+                button.disabled = true;
+                button.textContent =
+                    "Generating Report...";
+
+
+                const response = await fetch(
+                    `${BACKEND_URL}/api/reports/screening/${screeningId}`
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to generate the report."
+                    );
+
+                }
+
+
+                const pdfBlob =
+                    await response.blob();
+
+
+                const downloadUrl =
+                    window.URL.createObjectURL(pdfBlob);
+
+
+                const link =
+                    document.createElement("a");
+
+
+                link.href = downloadUrl;
+
+                link.download =
+                    `DR_Screening_Report_${screeningId}.pdf`;
+
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.remove();
+
+
+                window.URL.revokeObjectURL(
+                    downloadUrl
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "PDF report error:",
+                    error
+                );
+
+                alert(
+                    "Unable to generate the PDF report. " +
+                    "Please try again."
+                );
+
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Generate PDF Report";
+
+            }
+
+        }
+
+    </script>
 
 </body>
 

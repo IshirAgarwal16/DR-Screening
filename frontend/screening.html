@@ -12,8 +12,7 @@
 
 <body class="screening-page">
 
-    <!-- ================= NAVBAR ================= -->
-
+    <!-- Navigation -->
     <nav class="navbar">
 
         <div class="logo">
@@ -29,18 +28,15 @@
     </nav>
 
 
-    <!-- ================= MAIN ================= -->
-
     <main class="screening-container">
 
-        <!-- ================= PAGE HEADER ================= -->
-
-        <div class="screening-header">
+        <!-- Page introduction -->
+        <header class="screening-header">
 
             <div>
 
                 <div class="section-label">
-                    AI-POWERED SCREENING
+                    AI-ASSISTED SCREENING
                 </div>
 
                 <h1>
@@ -49,14 +45,13 @@
 
                 <p>
                     Upload a retinal fundus image to perform
-                    AI-assisted diabetic retinopathy screening.
+                    an AI-assisted diabetic retinopathy screening.
                 </p>
 
             </div>
 
 
-            <!-- ================= PATIENT INFORMATION ================= -->
-
+            <!-- Current patient -->
             <div class="patient-mini-card">
 
                 <div class="patient-mini-icon">
@@ -81,16 +76,13 @@
 
             </div>
 
-        </div>
+        </header>
 
 
-        <!-- ================= SCREENING GRID ================= -->
-
+        <!-- Screening workspace -->
         <div class="screening-grid">
 
-
-            <!-- ================= UPLOAD CARD ================= -->
-
+            <!-- Image upload -->
             <div class="screening-card upload-card">
 
                 <div class="screening-card-header">
@@ -114,8 +106,7 @@
                 </div>
 
 
-                <!-- ================= UPLOAD AREA ================= -->
-
+                <!-- File selection area -->
                 <label
                     for="fundusImage"
                     class="upload-area"
@@ -127,11 +118,11 @@
                     </div>
 
                     <h3>
-                        Upload Fundus Image
+                        Select Fundus Image
                     </h3>
 
                     <p>
-                        Click to select an image
+                        Click here to choose an image
                     </p>
 
                     <span>
@@ -149,8 +140,7 @@
                 >
 
 
-                <!-- ================= IMAGE PREVIEW ================= -->
-
+                <!-- Selected image preview -->
                 <div
                     id="imagePreviewContainer"
                     class="image-preview-container"
@@ -174,8 +164,7 @@
                 </div>
 
 
-                <!-- ================= ANALYZE BUTTON ================= -->
-
+                <!-- Start AI analysis -->
                 <button
                     type="button"
                     id="analyzeButton"
@@ -186,8 +175,7 @@
                 </button>
 
 
-                <!-- ================= LOADING ================= -->
-
+                <!-- Processing indicator -->
                 <div
                     id="loadingMessage"
                     class="screening-loading"
@@ -207,8 +195,7 @@
                 </div>
 
 
-                <!-- ================= MESSAGE ================= -->
-
+                <!-- Upload / analysis messages -->
                 <div
                     id="screeningMessage"
                     class="screening-message"
@@ -217,8 +204,7 @@
             </div>
 
 
-            <!-- ================= PROCESS CARD ================= -->
-
+            <!-- Screening pipeline -->
             <div class="screening-card">
 
                 <div class="screening-card-header">
@@ -234,7 +220,7 @@
                         </h2>
 
                         <p>
-                            AI analysis pipeline
+                            How the AI screening pipeline works
                         </p>
 
                     </div>
@@ -244,9 +230,7 @@
 
                 <div class="process-list">
 
-
-                    <!-- STEP 1 -->
-
+                    <!-- Step 1 -->
                     <div class="process-step">
 
                         <div class="process-number">
@@ -261,7 +245,7 @@
 
                             <p>
                                 Checks whether the uploaded image
-                                is a retinal fundus image.
+                                appears to be a retinal fundus image.
                             </p>
 
                         </div>
@@ -272,8 +256,7 @@
                     <div class="process-line"></div>
 
 
-                    <!-- STEP 2 -->
-
+                    <!-- Step 2 -->
                     <div class="process-step">
 
                         <div class="process-number">
@@ -299,8 +282,7 @@
                     <div class="process-line"></div>
 
 
-                    <!-- STEP 3 -->
-
+                    <!-- Step 3 -->
                     <div class="process-step">
 
                         <div class="process-number">
@@ -310,11 +292,11 @@
                         <div>
 
                             <strong>
-                                AI DR Detection
+                                AI DR Screening
                             </strong>
 
                             <p>
-                                ResNet18 predicts the
+                                ResNet18 estimates the
                                 diabetic retinopathy grade.
                             </p>
 
@@ -326,8 +308,7 @@
                     <div class="process-line"></div>
 
 
-                    <!-- STEP 4 -->
-
+                    <!-- Step 4 -->
                     <div class="process-step">
 
                         <div class="process-number">
@@ -342,7 +323,7 @@
 
                             <p>
                                 Grad-CAM highlights regions
-                                influencing the AI prediction.
+                                that influenced the AI prediction.
                             </p>
 
                         </div>
@@ -356,7 +337,9 @@
         </div>
 
 
-        <!-- ================= RESULT SECTION ================= -->
+        <!-- =====================================================
+             SCREENING RESULT
+        ====================================================== -->
 
         <section
             id="resultSection"
@@ -364,8 +347,7 @@
             style="display: none;"
         >
 
-            <!-- RESULT HEADER -->
-
+            <!-- Result heading -->
             <div class="result-header">
 
                 <div>
@@ -390,13 +372,10 @@
             </div>
 
 
-            <!-- ================= RESULT CARDS ================= -->
-
+            <!-- Result summary -->
             <div class="result-grid">
 
-
-                <!-- DR GRADE -->
-
+                <!-- DR grade -->
                 <div class="result-card">
 
                     <span class="result-label">
@@ -420,8 +399,7 @@
                 </div>
 
 
-                <!-- CONFIDENCE -->
-
+                <!-- Confidence -->
                 <div class="result-card">
 
                     <span class="result-label">
@@ -442,8 +420,7 @@
                 </div>
 
 
-                <!-- REFERABLE STATUS -->
-
+                <!-- Referable status -->
                 <div class="result-card">
 
                     <span class="result-label">
@@ -469,13 +446,13 @@
             </div>
 
 
-            <!-- ================= IMAGE RESULTS ================= -->
+            <!-- =================================================
+                 RESULT IMAGES
+            ================================================== -->
 
             <div class="result-images">
 
-
-                <!-- ORIGINAL IMAGE -->
-
+                <!-- Original fundus -->
                 <div class="result-image-card">
 
                     <h3>
@@ -495,8 +472,7 @@
                 </div>
 
 
-                <!-- GRAD-CAM -->
-
+                <!-- Grad-CAM -->
                 <div class="result-image-card">
 
                     <h3>
@@ -523,7 +499,9 @@
             </div>
 
 
-            <!-- ================= RECOMMENDATION ================= -->
+            <!-- =================================================
+                 RECOMMENDATION
+            ================================================== -->
 
             <div class="recommendation-card">
 
@@ -546,7 +524,9 @@
             </div>
 
 
-            <!-- ================= QUALITY DETAILS ================= -->
+            <!-- =================================================
+                 IMAGE QUALITY
+            ================================================== -->
 
             <div
                 id="qualityDetails"
@@ -602,7 +582,9 @@
             </div>
 
 
-            <!-- ================= NEW SCREENING ================= -->
+            <!-- =================================================
+                 NEXT ACTIONS
+            ================================================== -->
 
             <div class="new-screening">
 
@@ -614,8 +596,6 @@
                     Start New Screening
                 </button>
 
-
-                <!-- ================= SCREENING HISTORY ================= -->
 
                 <button
                     type="button"
@@ -633,8 +613,7 @@
     </main>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-
+    <!-- Existing frontend logic -->
     <script src="js/script.js"></script>
 
 </body>

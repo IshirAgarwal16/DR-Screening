@@ -1,16 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Patient Registration | DR Screening</title>
+    <title>DR Screening | Patient Registration</title>
 
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* ================= PATIENT PAGE ================= */
+
+        /* Page layout */
 
         .patient-page {
             margin: 0;
@@ -21,17 +25,20 @@
             overflow-x: hidden;
         }
 
-        /* ================= NAVBAR ================= */
+
+        /* Navigation */
 
         .patient-navbar {
             width: 100%;
             height: 72px;
-            background: #ffffff;
+            padding: 0 7%;
+            box-sizing: border-box;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 7%;
-            box-sizing: border-box;
+
+            background: #ffffff;
             border-bottom: 1px solid #e5eaf1;
         }
 
@@ -52,8 +59,8 @@
         }
 
         .patient-nav-links a {
-            text-decoration: none;
             color: #344054;
+            text-decoration: none;
             font-size: 16px;
             font-weight: 500;
         }
@@ -62,27 +69,31 @@
             color: #2563eb;
         }
 
-        /* ================= MAIN SECTION ================= */
+
+        /* Main content */
 
         .patient-main {
             min-height: calc(100vh - 72px);
+            padding: 55px 7%;
+            box-sizing: border-box;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 55px 7%;
-            box-sizing: border-box;
         }
 
         .patient-wrapper {
             width: 100%;
             max-width: 1100px;
+
             display: grid;
             grid-template-columns: 1fr 420px;
             gap: 80px;
             align-items: center;
         }
 
-        /* ================= LEFT CONTENT ================= */
+
+        /* Information section */
 
         .patient-info {
             padding: 20px;
@@ -91,28 +102,34 @@
         .patient-info-icon {
             width: 70px;
             height: 70px;
-            border-radius: 18px;
-            background: #eaf1ff;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
+
             margin-bottom: 28px;
+
+            border-radius: 18px;
+            background: #eaf1ff;
+
+            font-size: 34px;
         }
 
         .patient-info h1 {
+            margin: 0 0 22px;
+
+            color: #17213a;
             font-size: 52px;
             line-height: 1.08;
-            margin: 0 0 22px;
-            color: #17213a;
         }
 
         .patient-info > p {
             max-width: 560px;
+            margin-bottom: 32px;
+
+            color: #667085;
             font-size: 19px;
             line-height: 1.7;
-            color: #667085;
-            margin-bottom: 32px;
         }
 
         .patient-points {
@@ -130,52 +147,62 @@
         .patient-point span {
             width: 30px;
             height: 30px;
-            border-radius: 50%;
-            background: #e7f8ef;
-            color: #12a150;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
+            border-radius: 50%;
+            background: #e7f8ef;
+            color: #12a150;
+
             font-weight: 700;
         }
 
         .patient-point p {
             margin: 0;
-            font-size: 16px;
             color: #475467;
+            font-size: 16px;
         }
 
-        /* ================= REGISTRATION CARD ================= */
+
+        /* Registration card */
 
         .patient-card {
-            background: #ffffff;
-            border-radius: 20px;
             padding: 38px;
-            box-shadow: 0 15px 45px rgba(16, 24, 40, 0.10);
+
+            background: #ffffff;
             border: 1px solid #e8edf4;
+            border-radius: 20px;
+
+            box-shadow: 0 15px 45px rgba(16, 24, 40, 0.10);
         }
 
         .patient-card-header {
-            text-align: center;
             margin-bottom: 28px;
+            text-align: center;
         }
 
         .patient-card-icon {
             width: 64px;
             height: 64px;
-            border-radius: 16px;
-            background: #eaf1ff;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+
             margin: 0 auto 18px;
+
+            border-radius: 16px;
+            background: #eaf1ff;
+
+            font-size: 30px;
         }
 
         .patient-card-header h2 {
             margin: 0 0 8px;
-            font-size: 28px;
             color: #17213a;
+            font-size: 28px;
         }
 
         .patient-card-header p {
@@ -184,7 +211,8 @@
             font-size: 15px;
         }
 
-        /* ================= FORM ================= */
+
+        /* Registration form */
 
         .patient-form-group {
             margin-bottom: 20px;
@@ -193,9 +221,10 @@
         .patient-form-group label {
             display: block;
             margin-bottom: 8px;
+
+            color: #344054;
             font-size: 14px;
             font-weight: 600;
-            color: #344054;
         }
 
         .patient-form-group input,
@@ -204,10 +233,13 @@
             height: 50px;
             padding: 0 14px;
             box-sizing: border-box;
+
             border: 1px solid #d0d5dd;
             border-radius: 10px;
+
             background: #ffffff;
             color: #17213a;
+
             font-size: 15px;
             outline: none;
         }
@@ -221,14 +253,18 @@
         .patient-submit {
             width: 100%;
             min-height: 52px;
+            margin-top: 8px;
+
             border: none;
             border-radius: 10px;
+
             background: #2563eb;
             color: #ffffff;
+
             font-size: 16px;
             font-weight: 600;
+
             cursor: pointer;
-            margin-top: 8px;
         }
 
         .patient-submit:hover {
@@ -236,14 +272,16 @@
         }
 
         .patient-message {
+            min-height: 20px;
             margin-top: 15px;
+
             text-align: center;
             font-size: 14px;
         }
 
         .patient-footer-link {
-            text-align: center;
             margin-top: 22px;
+            text-align: center;
         }
 
         .patient-footer-link a {
@@ -253,18 +291,21 @@
             font-weight: 500;
         }
 
-        /* ================= FOOTER ================= */
+
+        /* Footer */
 
         .patient-footer {
+            padding: 28px 20px;
+
             background: #111827;
             color: #ffffff;
+
             text-align: center;
-            padding: 28px 20px;
         }
 
         .patient-footer .patient-logo {
-            color: #ffffff;
             margin-bottom: 8px;
+            color: #ffffff;
         }
 
         .patient-footer p {
@@ -273,7 +314,8 @@
             font-size: 14px;
         }
 
-        /* ================= RESPONSIVE ================= */
+
+        /* Responsive layout */
 
         @media (max-width: 900px) {
 
@@ -282,9 +324,9 @@
             }
 
             .patient-wrapper {
+                max-width: 650px;
                 grid-template-columns: 1fr;
                 gap: 40px;
-                max-width: 650px;
             }
 
             .patient-info {
@@ -304,6 +346,7 @@
                 justify-content: center;
             }
         }
+
 
         @media (max-width: 600px) {
 
@@ -327,6 +370,7 @@
                 padding: 25px;
             }
         }
+
     </style>
 
 </head>
@@ -335,7 +379,7 @@
 <body class="patient-page">
 
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- Navigation -->
 
     <header class="patient-navbar">
 
@@ -366,14 +410,14 @@
     </header>
 
 
-    <!-- ================= MAIN ================= -->
+    <!-- Registration area -->
 
     <main class="patient-main">
 
         <div class="patient-wrapper">
 
 
-            <!-- ================= LEFT INFORMATION ================= -->
+            <!-- Introduction -->
 
             <section class="patient-info">
 
@@ -387,8 +431,8 @@
                 </h1>
 
                 <p>
-                    Register a patient before starting the
-                    diabetic retinopathy screening process.
+                    Add the patient's basic information before
+                    starting the diabetic retinopathy screening.
                 </p>
 
 
@@ -401,17 +445,17 @@
 
                     <div class="patient-point">
                         <span>✓</span>
-                        <p>AI-powered DR screening</p>
+                        <p>AI-assisted DR screening</p>
                     </div>
 
                     <div class="patient-point">
                         <span>✓</span>
-                        <p>Automated screening reports</p>
+                        <p>Screening results and reports</p>
                     </div>
 
                     <div class="patient-point">
                         <span>✓</span>
-                        <p>Doctor review and referral</p>
+                        <p>Doctor review and referral support</p>
                     </div>
 
                 </div>
@@ -419,10 +463,9 @@
             </section>
 
 
-            <!-- ================= REGISTRATION CARD ================= -->
+            <!-- Registration form -->
 
             <section class="patient-card">
-
 
                 <div class="patient-card-header">
 
@@ -435,16 +478,36 @@
                     </h2>
 
                     <p>
-                        Enter patient details to continue
+                        Enter the details below to continue.
                     </p>
 
                 </div>
 
 
-                <!-- ================= FORM ================= -->
-
                 <form id="patientForm">
 
+
+                    <!-- Patient ID -->
+
+                    <div class="patient-form-group">
+
+                        <label for="patientId">
+                            Patient ID
+                        </label>
+
+                        <input
+                            type="number"
+                            id="patientId"
+                            name="id"
+                            placeholder="Enter patient ID"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Name -->
 
                     <div class="patient-form-group">
 
@@ -464,6 +527,8 @@
                     </div>
 
 
+                    <!-- Age -->
+
                     <div class="patient-form-group">
 
                         <label for="patientAge">
@@ -482,6 +547,8 @@
 
                     </div>
 
+
+                    <!-- Gender -->
 
                     <div class="patient-form-group">
 
@@ -524,18 +591,17 @@
                         Register Patient
                     </button>
 
+
                 </form>
 
 
-                <!-- STATUS MESSAGE -->
+                <!-- Registration status -->
 
                 <div
                     id="patientMessage"
                     class="patient-message"
                 ></div>
 
-
-                <!-- BACK -->
 
                 <div class="patient-footer-link">
 
@@ -545,14 +611,16 @@
 
                 </div>
 
+
             </section>
+
 
         </div>
 
     </main>
 
 
-    <!-- ================= FOOTER ================= -->
+    <!-- Footer -->
 
     <footer class="patient-footer">
 
@@ -571,9 +639,8 @@
     </footer>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-
     <script src="js/script.js"></script>
+
 
 </body>
 

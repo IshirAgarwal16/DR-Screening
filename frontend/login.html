@@ -5,29 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login | DR Screening</title>
+    <title>DR Screening | Login</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
+
 <body class="login-page">
 
-    <div class="login-container">
+    <main class="login-container">
 
-        <div class="login-card">
+        <section class="login-card">
 
             <div class="login-logo">
                 DR<span>Screening</span>
             </div>
 
-            <h1>Welcome Back</h1>
+
+            <h1>
+                Welcome Back
+            </h1>
 
             <p class="login-subtitle">
-                Login to access the DR Screening platform
+                Sign in to continue to the DR Screening platform.
             </p>
+
 
             <form id="loginForm">
 
+                <!-- Email -->
                 <div class="form-group">
 
                     <label for="email">
@@ -37,13 +43,16 @@
                     <input
                         type="email"
                         id="email"
-                        placeholder="Enter your email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
                         required
                     >
 
                 </div>
 
 
+                <!-- Password -->
                 <div class="form-group">
 
                     <label for="password">
@@ -53,13 +62,16 @@
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         placeholder="Enter your password"
+                        autocomplete="current-password"
                         required
                     >
 
                 </div>
 
 
+                <!-- User role -->
                 <div class="form-group">
 
                     <label>
@@ -103,11 +115,12 @@
                 </div>
 
 
+                <!-- Submit -->
                 <button
                     type="submit"
                     class="login-submit"
                 >
-                    Login
+                    Sign In
                 </button>
 
             </form>
@@ -120,13 +133,13 @@
                 ← Back to Home
             </a>
 
-        </div>
+        </section>
 
-    </div>
+    </main>
 
 
-    <!-- Frontend JavaScript -->
     <script src="js/script.js"></script>
 
 </body>
+
 </html>
