@@ -1,8 +1,10 @@
 # DR-Screening — Explainable AI for Diabetic Retinopathy
 
-DR-Screening is an AI-assisted diabetic retinopathy screening prototype that analyzes retinal fundus images using deep learning. It combines image validation, quality assessment, severity classification, referable-DR assessment, and Grad-CAM visualization in a screening workflow.
+DR-Screening is an AI-assisted diabetic retinopathy (DR) screening prototype that analyzes retinal fundus images using deep learning. It combines fundus image validation, image quality assessment, severity classification, referable-DR assessment, and Grad-CAM visualization in a screening workflow.
 
 The project explores how explainable AI could support retinal screening workflows, including settings where access to eye-care specialists may be limited.
+
+> **Disclaimer:** This project is intended for educational and research purposes. It is not a clinically validated diagnostic system and must not replace professional medical evaluation.
 
 ## Features
 
@@ -10,27 +12,40 @@ The project explores how explainable AI could support retinal screening workflow
 - **Image Quality Assessment:** Evaluates sharpness, brightness, and contrast before classification.
 - **DR Severity Classification:** Uses a ResNet18 model to classify retinal images into five severity grades.
 - **Referable DR Assessment:** Calculates referable-DR probability from the predicted probabilities of Grades 2, 3, and 4.
-- **Grad-CAM Visualization:** Generates a heatmap highlighting image regions that influenced the model prediction.
-- **Patient Registration:** Provides a web interface for entering patient information.
+- **Grad-CAM Visualization:** Generates a heatmap to help inspect image regions that influenced the model prediction.
+- **Patient Registration:** Provides an interface for entering patient information.
 - **Screening Workflow:** Supports image upload, analysis, and presentation of screening results.
-- **Screening History:** Includes pages for reviewing previous screening records and individual screening details.
+- **Screening History:** Provides pages for reviewing previous screening records and individual screening details.
 - **REST API:** Exposes image analysis through FastAPI.
-- **Docker Support:** Includes a Dockerfile for containerizing the AI service.
+- **Backend Integration:** Uses Spring Boot to manage application workflows and communicate with the AI service.
+- **Database Integration:** Uses PostgreSQL to store patient and screening records.
 
 ## Technology Stack
 
 | Component | Technologies |
 |---|---|
 | AI model | PyTorch, Torchvision, ResNet18 |
-| API | FastAPI, Uvicorn |
+| AI API | FastAPI, Uvicorn |
 | Image processing | OpenCV, Pillow, NumPy |
 | Model hosting | Hugging Face Hub |
 | Frontend | HTML, CSS, JavaScript |
 | Backend | Java, Spring Boot |
 | Database | PostgreSQL |
-| Containerization | Docker |
+| Development tools | Git, VS Code |
+
+## System Architecture
+
+The application consists of three main services:
+
+1. **Frontend:** Provides the user interface for patient registration, image upload, and screening results.
+2. **Spring Boot Backend:** Manages application workflows, communicates with the AI service, and interacts with PostgreSQL.
+3. **FastAPI AI Service:** Validates retinal images, performs quality checks, runs the DR classifier, and generates Grad-CAM visualizations.
+
+PostgreSQL stores the application's patient and screening records.
 
 ## Repository Structure
+
+The following tree represents the main AI repository files and frontend structure:
 
 ```text
 DR-Screening/
@@ -54,11 +69,12 @@ DR-Screening/
 ├── model.py
 ├── quality_check.py
 ├── requirements.txt
-├── Dockerfile
 └── best_model.pth
 ```
 
-The tree highlights the principal files used by the screening interface and AI service. The trained checkpoint may be hosted separately if it is too large to include in the Git repository.
+The Spring Boot backend is maintained separately in the `DR-Backend` project.
+
+The trained model checkpoint may be stored locally or obtained from the configured model-hosting source, depending on the implementation.
 
 ## How the System Works
 
@@ -101,7 +117,7 @@ The model predicts one of five diabetic retinopathy grades.
 | 3 | Severe DR |
 | 4 | Proliferative DR |
 
-### Referable DR
+### Referable DR Assessment
 
 For this prototype, Grades 0–1 are classified as non-referable and Grades 2–4 as referable.
 
@@ -115,7 +131,7 @@ referable_probability = (
 )
 ```
 
-The current configured decision threshold is `0.46`.
+The configured decision threshold is `0.46`. The final assessment depends on the implementation's threshold logic and model outputs.
 
 ## Dataset and Model
 
@@ -127,13 +143,13 @@ The severity classifier was trained using the APTOS 2019 Blindness Detection dat
 - **Training/validation split:** 80/20
 - **Model checkpoint:** `best_model.pth`
 
-The project also includes a separate fundus validator. Its current prototype training setup uses retinal images as positive examples and CIFAR-10 images as negative examples. More challenging real-world negative images are needed for a stronger evaluation.
+The project also includes a separate fundus validator. Its current prototype training setup uses retinal images as positive examples and CIFAR-10 images as negative examples. More challenging real-world negative images are needed for stronger evaluation.
 
 ### Model Evaluation
 
-On the APTOS validation split, the referable-DR classifier achieved the following results at a threshold of `0.46`:
+The reported results on the APTOS validation split at a referable-DR threshold of `0.46` are:
 
-| Metric | Result |
+| Metric | Reported Result |
 |---|---:|
 | Accuracy | 92.63% |
 | Sensitivity | 90.60% |
@@ -141,149 +157,178 @@ On the APTOS validation split, the referable-DR classifier achieved the followin
 | Precision | 91.22% |
 | F1-score | 90.91% |
 
-These results describe performance on the project's dataset split. They do not establish clinical validity or guarantee performance on images collected in real-world healthcare settings.
+These figures are reported project results and should be retained only if supported by the corresponding evaluation output. They describe performance on the project's dataset split and do not establish clinical validity or guarantee performance on images collected in real-world healthcare settings.
 
 ## Grad-CAM Explainability
 
-Grad-CAM is used to generate a visual heatmap associated with the model's prediction. It helps inspect which image regions influenced the classification.
+Grad-CAM generates a visual heatmap associated with the model's prediction. It helps inspect which image regions influenced the classification.
 
-The heatmap is an interpretability aid, not proof that a particular retinal lesion exists. Its output should be considered alongside the model prediction and other limitations of the prototype.
+The heatmap is an interpretability aid, not proof that a particular retinal lesion exists. Its output should be considered alongside the model prediction and the limitations of the prototype.
 
 ## Requirements
 
 For local development:
 
 - Python 3.11
+- Java 21
+- Maven 3.9 or a compatible version
+- PostgreSQL 16 or a compatible version
 - Git
-- Dependencies listed in `requirements.txt`
+- Python dependencies listed in `requirements.txt`
 
-For containerized execution:
+The frontend uses HTML, CSS, and JavaScript and can be served locally using a suitable static file server.
 
-- Docker Desktop
+**The current development setup does not require Docker.**
 
 ## Local Setup
 
-### 1. Open the project directory
+### 1. Clone the AI Repository
 
 ```powershell
-cd C:\Ishircode\DR-Screening
+git clone https://github.com/IshirAgarwal16/DR-Screening.git
+cd DR-Screening
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create a Python Virtual Environment
 
 ```powershell
 python -m venv venv
+```
+
+Activate it in PowerShell:
+
+```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks script execution, you can temporarily allow activation scripts in the current terminal:
+If PowerShell blocks script execution, run the following in the current terminal:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 .\venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+Alternatively, run the Python executable directly without activating the environment.
+
+### 3. Install Python Dependencies
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-### 4. Start FastAPI
+Ensure that the installed PyTorch and Torchvision versions are compatible with the model and your Python environment.
+
+### 4. Start the AI Service
+
+From the AI repository directory:
 
 ```powershell
-uvicorn ai_api:app --reload
+python -m uvicorn ai_api:app --reload --host 127.0.0.1 --port 8000
 ```
 
-The AI service should be available at:
+The service should be accessible at:
 
-- API base URL: `http://127.0.0.1:8000`
-- Interactive API documentation: `http://127.0.0.1:8000/docs`
-- Health check: `http://127.0.0.1:8000/health`
+- **API base URL:** `http://localhost:8000`
+- **Interactive API documentation:** `http://localhost:8000/docs`
+- **Health check:** `http://localhost:8000/health`
 
-To run the API so that it is accessible through Docker networking, use:
+Keep this terminal open while using the application.
+
+### 5. Set Up PostgreSQL
+
+Ensure PostgreSQL is installed and running.
+
+Create or use the `dr_screening` database and configure the Spring Boot application's database connection.
+
+Example local database URL:
+
+```text
+jdbc:postgresql://localhost:5432/dr_screening
+```
+
+Configure the database username and password through environment variables or a local, uncommitted configuration file. Do not commit credentials to GitHub.
+
+### 6. Start the Spring Boot Backend
+
+The backend is maintained separately in the `DR-Backend` project.
+
+Open another PowerShell terminal and navigate to the backend directory:
 
 ```powershell
-uvicorn ai_api:app --host 0.0.0.0 --port 8000
+cd C:\Ishircode\DR-Backend\drbackend
+mvn spring-boot:run
 ```
 
-Keep the terminal running while using the application.
+The backend is configured to use port `8084`. Confirm the startup logs before testing the application.
+
+Ensure that the backend's AI service URL points to the local FastAPI service:
+
+```text
+http://localhost:8000/analyze
+```
+
+This address applies when both services run directly on the same machine. The actual configuration must match the backend implementation.
+
+### 7. Start the Frontend
+
+The frontend consists of HTML, CSS, and JavaScript files in the `frontend` directory.
+
+Serve the frontend locally using a static file server and open the appropriate page in your browser. Verify that its API requests point to the running Spring Boot backend.
+
+If the frontend and backend use different origins, configure appropriate Cross-Origin Resource Sharing (CORS) settings in the backend.
 
 ## API Endpoints
 
 | Method | Endpoint | Purpose |
 |---|---|---|
 | GET | `/` | Root endpoint |
-| GET | `/health` | Service health check |
+| GET | `/health` | AI service health check |
 | POST | `/analyze` | Analyze an uploaded retinal image |
 
-The `/analyze` endpoint processes the image and returns the analysis response, including relevant classification, quality, referable-DR, and Grad-CAM information.
+The `/analyze` endpoint returns the analysis response, including the classification, quality assessment, referable-DR information, and Grad-CAM output supported by the implementation.
 
-Refer to the interactive API documentation at `/docs` for the exact request format and response schema.
+Refer to the interactive API documentation at `http://localhost:8000/docs` for the actual request format and response schema.
 
-## Run with Docker
-
-Build the AI service image from the repository root:
-
-```powershell
-docker build -t dr-screening-ai .
-```
-
-Start the container:
-
-```powershell
-docker run --name dr-screening-container -p 8000:8000 dr-screening-ai
-```
-
-Test the health endpoint:
-
-```powershell
-curl.exe http://localhost:8000/health
-```
-
-If the container fails during startup, inspect its logs:
-
-```powershell
-docker logs dr-screening-container
-```
-
-The model checkpoint or model-hosting configuration must be accessible to the application at runtime.
-
-## Integration with the Backend
-
-The complete prototype uses separate services:
+## Service Ports
 
 | Service | Port |
 |---|---:|
 | Spring Boot backend | 8084 |
 | FastAPI AI service | 8000 |
-| PostgreSQL database | 5432 |
+| PostgreSQL | 5432 |
 
-The Spring Boot backend manages patient records, communicates with the AI service, and stores screening results in PostgreSQL.
-
-When Spring Boot runs inside Docker and FastAPI runs directly on the Windows host, configure the backend's AI endpoint as:
-
-```text
-http://host.docker.internal:8000/analyze
-```
-
-When both services run inside Docker, they should share a Docker network. In that setup, use the AI container or Compose service name instead of `localhost` or `127.0.0.1`.
+These are the configured local development ports. If a port is changed, update the relevant service configuration and API URLs accordingly.
 
 ## Security and Data Handling
 
-- Keep database passwords and API keys out of Git commits.
-- Exclude virtual environments, local environment files, and unnecessary generated files from the repository.
-- Avoid publishing patient-identifiable information or real patient images in public repositories.
-- Use appropriate access controls and data-protection measures before handling real patient information.
+- Keep database passwords, API keys, and other secrets out of Git commits.
+- Use environment variables or local configuration files excluded from version control.
+- Exclude virtual environments, caches, and unnecessary generated files from the repository.
+- Do not publish patient-identifiable information or real patient images in a public repository.
+- Apply appropriate authentication, authorization, and data-protection measures before handling real patient information.
 
 ## Limitations and Intended Use
 
-DR-Screening is a development and educational prototype, not a clinically validated diagnostic system.
+DR-Screening is an educational and research prototype, not a clinically validated diagnostic system.
 
 - Dataset-based metrics do not guarantee real-world performance.
 - Image-quality thresholds are heuristic and require further evaluation.
 - The fundus validator needs testing against more realistic non-fundus images.
 - Grad-CAM highlights regions that influenced a prediction; it does not prove the presence of disease.
+- The model may be affected by differences in cameras, image quality, populations, and acquisition conditions.
 - Predictions must not replace examination by a qualified eye-care professional.
 
-Clinical validation, external testing, privacy safeguards, and appropriate regulatory review are necessary before real-world clinical deployment.
+Clinical validation, external testing, privacy safeguards, security controls, and appropriate regulatory review are necessary before real-world clinical deployment.
+
+## Future Improvements
+
+- Evaluate performance on an independent external dataset.
+- Improve fundus validation using challenging non-fundus images.
+- Assess calibration and threshold selection for referable DR.
+- Strengthen API authentication, input validation, and error handling.
+- Improve explainability evaluation and user-facing result presentation.
+- Conduct usability and workflow testing with qualified eye-care professionals.
+
+## Acknowledgements
+
+This project uses the APTOS 2019 Blindness Detection dataset for diabetic retinopathy classification research. Refer to the dataset's original source and terms for attribution and usage requirements.
