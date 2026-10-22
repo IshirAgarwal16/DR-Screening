@@ -432,6 +432,13 @@ async function analyzeFundusImage() {
     formData.append("file", file);
     formData.append("patientId", patientId);
 
+    // Hide a previous result while a new request is pending. A failed
+    // request must never leave an old estimate looking current.
+    const resultSection = document.getElementById("resultSection");
+    if (resultSection) {
+        resultSection.style.display = "none";
+    }
+
     setAnalysisLoading(true);
 
     try {

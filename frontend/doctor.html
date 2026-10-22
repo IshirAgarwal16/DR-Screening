@@ -7,204 +7,6 @@
     <title>DR Screening | Doctor Dashboard</title>
 
     <link rel="stylesheet" href="css/style.css">
-
-    <style>
-        .doctor-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .doctor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .doctor-header h1 {
-            margin: 0;
-        }
-
-        .doctor-header p {
-            margin-top: 8px;
-            opacity: 0.7;
-        }
-
-        .doctor-badge {
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            padding: 24px;
-            border-radius: 14px;
-        }
-
-        .stat-card span {
-            display: block;
-            margin-bottom: 10px;
-            opacity: 0.7;
-        }
-
-        .stat-card strong {
-            font-size: 32px;
-        }
-
-        .patients-card {
-            padding: 25px;
-            border-radius: 14px;
-        }
-
-        .patients-card-header {
-            margin-bottom: 20px;
-        }
-
-        .patients-card-header h2 {
-            margin: 0;
-        }
-
-        .patients-card-header p {
-            opacity: 0.7;
-        }
-
-        .filter-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .filter-input,
-        .filter-select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid rgba(128, 128, 128, 0.3);
-            border-radius: 8px;
-            background: transparent;
-            color: inherit;
-            font-size: 14px;
-            outline: none;
-            box-sizing: border-box;
-        }
-
-        .filter-input:focus,
-        .filter-select:focus {
-            border-color: #4f8cff;
-        }
-
-        .filter-select option {
-            background: #111827;
-            color: white;
-        }
-
-        .filter-summary {
-            margin-bottom: 15px;
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        .patients-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .patients-table th,
-        .patients-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-        }
-
-        .patients-table th {
-            font-weight: 600;
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-        }
-
-        .action-buttons button {
-            border: none;
-            padding: 9px 12px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .history-button {
-            background: #4f8cff;
-            color: white;
-        }
-
-        .history-button:hover {
-            opacity: 0.85;
-        }
-
-        .delete-history-button {
-            background: #dc2626;
-            color: white;
-        }
-
-        .delete-history-button:hover {
-            background: #b91c1c;
-        }
-
-        .delete-patient-button {
-            background: #7f1d1d;
-            color: white;
-        }
-
-        .delete-patient-button:hover {
-            background: #991b1b;
-        }
-
-        .loading-message,
-        .empty-message,
-        .error-message {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .error-message h3,
-        .empty-message h3 {
-            margin-bottom: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .doctor-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filter-container {
-                grid-template-columns: 1fr;
-            }
-
-            .patients-table {
-                min-width: 950px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -240,7 +42,7 @@
             </div>
 
             <div class="doctor-badge">
-                👨‍⚕️ Doctor
+                Doctor
             </div>
         </header>
 
@@ -285,7 +87,7 @@
                     type="text"
                     id="patientSearch"
                     class="filter-input"
-                    placeholder="🔍 Search by Patient ID or Name..."
+                    placeholder="Search by patient ID or name..."
                 >
 
                 <select id="genderFilter" class="filter-select">
