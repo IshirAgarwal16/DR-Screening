@@ -1,7 +1,6 @@
 
 [build]
+  base = "frontend"
   command = ""
-  publish = "frontend"
+  publish = "."
 
-[build.environment]
-  PYTHON_VERSION = "3.11"
