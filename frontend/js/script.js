@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://dr-screening-backend-0q8k.onrender.com";
+const BACKEND_URL = "http://localhost:8084";
 /* =========================
    LOGIN
 ========================= */
