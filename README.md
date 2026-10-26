@@ -20,6 +20,15 @@ The project explores how explainable AI could support retinal screening workflow
 - **Backend Integration:** Uses Spring Boot to manage application workflows and communicate with the AI service.
 - **Database Integration:** Uses PostgreSQL to store patient and screening records.
 
+
+## Website Preview
+
+Add a screenshot of the website to `docs/images/dr-screening-website.png` and keep the image reference below. This makes the repository README easier to understand at a glance.
+
+![DR-Screening website preview](docs/images/dr-screening-website.png)
+
+> Replace this placeholder image path with the actual screenshot file you add to the repository. Do not include real patient information in screenshots.
+
 ## Technology Stack
 
 | Component | Technologies |
@@ -69,6 +78,9 @@ DR-Screening/
 ├── model.py
 ├── quality_check.py
 ├── requirements.txt
+├── memory_assistant.py
+├── test_groq.py
+├── test_hindsight.py
 └── best_model.pth
 ```
 
@@ -158,6 +170,32 @@ The reported results on the APTOS validation split at a referable-DR threshold o
 | F1-score | 90.91% |
 
 These figures are reported project results and should be retained only if supported by the corresponding evaluation output. They describe performance on the project's dataset split and do not establish clinical validity or guarantee performance on images collected in real-world healthcare settings.
+
+
+## Hindsight Memory and Groq Assistant (Local Prototype)
+
+Alongside the retinal screening workflow, this repository includes an experimental memory-assistant prototype in `memory_assistant.py`. It connects **Hindsight** for persistent memory with **Groq** for generating responses from retrieved context.
+
+- **Hindsight:** The assistant uses `retain()` to store interaction context and `recall()` to retrieve relevant memories for a later question.
+- **Groq:** The retrieved context and the user's question are sent to the configured Groq model (`openai/gpt-oss-120b`) to generate a response.
+- **FastAPI:** `GET /health` checks the assistant service and `POST /chat` runs the memory-assisted response flow.
+- **Configuration:** `HINDSIGHT_API_URL`, `HINDSIGHT_API_KEY`, `HINDSIGHT_BANK_ID`, `GROQ_API_KEY`, and `GROQ_MODEL` are loaded from environment variables using `python-dotenv`. Keep secrets in a local `.env` file and never commit it.
+
+The Hindsight and Groq connection was tested locally using synthetic demo information. This is currently a **separate local prototype**; full integration with the existing DR-Screening frontend and Spring Boot backend has not been confirmed. It does not change or replace the retinal image classification model, and it must not be treated as a medical diagnostic tool. No live deployment is part of the current scope.
+
+### Run the Memory Assistant Locally
+
+1. Install the additional packages from `requirements.txt`.
+2. Create a local `.env` file with the variables listed above. Use your own valid API credentials; do not paste keys into source code or commit them.
+3. Start the assistant from the repository root:
+
+```powershell
+python -m uvicorn memory_assistant:app --reload --host 127.0.0.1 --port 8001
+```
+
+4. Open `http://127.0.0.1:8001/docs` to try the API locally. The `/chat` request expects a `user_id` and `message`.
+
+This service is intended for development and demonstration only. Use synthetic data for demos and do not submit identifiable patient information to external AI or memory services.
 
 ## Grad-CAM Explainability
 
